@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.OrderbookRecord do
+defmodule Tradehub.Model.OrderbookRecord do
   @derive Jason.Encoder
   defstruct [
     :price,

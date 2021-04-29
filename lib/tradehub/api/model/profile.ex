@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Profile do
+defmodule Tradehub.Model.Profile do
   defstruct [
     :address,
     :last_seen_block,
@@ -6,4 +6,12 @@ defmodule Tradehub.API.Model.Profile do
     :twitter,
     :username
   ]
+
+  @type t :: %__MODULE__{
+          address: String.t(),
+          last_seen_block: String.t(),
+          last_seen_time: String.t(),
+          twitter: String.t(),
+          username: String.t()
+        }
 end

@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.OracleResult do
+defmodule Tradehub.Model.OracleResult do
   @derive Jason.Encoder
   defstruct [
     :block_height,

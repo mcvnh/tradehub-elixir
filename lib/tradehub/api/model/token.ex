@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Token do
+defmodule Tradehub.Model.Token do
   @derive Jason.Encoder
   defstruct [
     :name,

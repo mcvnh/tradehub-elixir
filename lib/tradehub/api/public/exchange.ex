@@ -1,5 +1,5 @@
-defmodule Tradehub.API.Public.Exchange do
-  alias Tradehub.API.Model
+defmodule Tradehub.Public.Exchange do
+  alias Tradehub.Model
 
   @tokens Application.fetch_env!(:tradehub, :public_exchange_tokens)
   @token Application.fetch_env!(:tradehub, :public_exchange_token)
@@ -16,39 +16,39 @@ defmodule Tradehub.API.Public.Exchange do
 
 
   def get_tokens do
-    Tradehub.API.get_list(@tokens, Model.Token)
+    Tradehub.get_list(@tokens, Model.Token)
   end
 
   def get_tokens! do
-    Tradehub.API.get_list!(@tokens, Model.Token)
+    Tradehub.get_list!(@tokens, Model.Token)
   end
 
   def get_token(token_symbol) do
-    Tradehub.API.get_one(@token, [params: %{token: String.downcase(token_symbol)}], Model.Token)
+    Tradehub.get_one(@token, [params: %{token: String.downcase(token_symbol)}], Model.Token)
   end
 
   def get_token!(token_symbol) do
-    Tradehub.API.get_one!(@token, [params: %{token: String.downcase(token_symbol)}], Model.Token)
+    Tradehub.get_one!(@token, [params: %{token: String.downcase(token_symbol)}], Model.Token)
   end
 
   def get_markets do
-    Tradehub.API.get_list(@markets, Model.Market)
+    Tradehub.get_list(@markets, Model.Market)
   end
 
   def get_markets! do
-    Tradehub.API.get_list!(@markets, Model.Market)
+    Tradehub.get_list!(@markets, Model.Market)
   end
 
   def get_market(market) do
-    Tradehub.API.get_one(@market, [params: %{market: String.downcase(market)}], Model.Market)
+    Tradehub.get_one(@market, [params: %{market: String.downcase(market)}], Model.Market)
   end
 
   def get_market!(market) do
-    Tradehub.API.get_one!(@market, [params: %{market: String.downcase(market)}], Model.Market)
+    Tradehub.get_one!(@market, [params: %{market: String.downcase(market)}], Model.Market)
   end
 
   def get_orderbook(market, limit \\ 50) do
-    result = Tradehub.API.get(@orderbook, [],[params: %{market: String.downcase(market), limit: limit}])
+    result = Tradehub.get(@orderbook, [],[params: %{market: String.downcase(market), limit: limit}])
     case result do
       {:ok, response} ->
         orderbook = cast_orderbook_response(response)
@@ -58,12 +58,12 @@ defmodule Tradehub.API.Public.Exchange do
   end
 
   def get_orderbook!(market, limit \\ 50) do
-    response = Tradehub.API.get!(@orderbook, [],[params: %{market: String.downcase(market), limit: limit}])
+    response = Tradehub.get!(@orderbook, [],[params: %{market: String.downcase(market), limit: limit}])
     cast_orderbook_response(response)
   end
 
   def get_oracle_results() do
-    result = Tradehub.API.get(@oracle_results)
+    result = Tradehub.get(@oracle_results)
     case result do
       {:ok, response} ->
         response
@@ -75,7 +75,7 @@ defmodule Tradehub.API.Public.Exchange do
   end
 
   def get_oracle_results!() do
-    Tradehub.API.get!(@oracle_results)
+    Tradehub.get!(@oracle_results)
     |> Map.get(:body)
     |> Map.values
     |> Enum.map(fn x -> parse(x, Model.OracleResult) end)
@@ -83,22 +83,22 @@ defmodule Tradehub.API.Public.Exchange do
 
 
   def get_oracle_result(id) do
-    Tradehub.API.get_one(@oracle_result, [params: %{id: String.upcase(id)}], Model.OracleResult)
+    Tradehub.get_one(@oracle_result, [params: %{id: String.upcase(id)}], Model.OracleResult)
   end
 
   def get_oracle_result!(id) do
-    Tradehub.API.get_one!(@oracle_result, [params: %{id: String.upcase(id)}], Model.OracleResult)
+    Tradehub.get_one!(@oracle_result, [params: %{id: String.upcase(id)}], Model.OracleResult)
   end
 
 
   # TODO
   def get_insurance_balance do
-    Tradehub.API.get_one(@insurance_balance, [], Model.Coin)
+    Tradehub.get_one(@insurance_balance, [], Model.Coin)
   end
 
   # TODO
   def get_insurance_balance! do
-    Tradehub.API.get_one!(@insurance_balance, [], Model.Coin)
+    Tradehub.get_one!(@insurance_balance, [], Model.Coin)
   end
 
 

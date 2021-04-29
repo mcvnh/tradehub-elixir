@@ -1,4 +1,9 @@
-defmodule Tradehub.API do
+defmodule Tradehub do
+  @moduledoc """
+  This module is designed to easily integrate your application with the Switcheo Tradehub Blockchain.
+
+  **NOTE**: This module is under development and may change drastically from each update.
+  """
   @network Application.fetch_env!(:tradehub, :network)
   @api if @network == "testnet", do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet
 
@@ -15,7 +20,7 @@ defmodule Tradehub.API do
   end
 
   def get_list(endpoint, cast_to_model, options \\ [], headers \\ []) do
-    case Tradehub.API.get(endpoint, headers, options) do
+    case Tradehub.get(endpoint, headers, options) do
       {:ok, response} ->
         items = Enum.map(response.body, fn x -> parse(x, cast_to_model) end)
         {:ok, items}
@@ -26,13 +31,13 @@ defmodule Tradehub.API do
   end
 
   def get_list!(endpoint, cast_to_model, options \\ [], headers \\ []) do
-    Tradehub.API.get!(endpoint, headers, options)
+    Tradehub.get!(endpoint, headers, options)
     |> Map.get(:body)
     |> Enum.map(fn x -> parse(x, cast_to_model) end)
   end
 
   def get_one(endpoint, options \\ [], cast_to_model, headers \\ []) do
-    case Tradehub.API.get(endpoint, headers, options) do
+    case Tradehub.get(endpoint, headers, options) do
       {:ok, response} ->
         item =
           response
@@ -47,7 +52,7 @@ defmodule Tradehub.API do
   end
 
   def get_one!(endpoint, options, cast_to_model, headers \\ []) do
-    Tradehub.API.get!(endpoint, headers, options)
+    Tradehub.get!(endpoint, headers, options)
     |> Map.get(:body)
     |> parse(cast_to_model)
   end

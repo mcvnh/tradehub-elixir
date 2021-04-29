@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Orderbook do
+defmodule Tradehub.Model.Orderbook do
   @derive Jason.Encoder
   defstruct asks: [],
             bids: []

@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Coin do
+defmodule Tradehub.Model.Coin do
   @derive Jason.Encoder
   defstruct [
     :amount,

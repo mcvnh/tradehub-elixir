@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Market do
+defmodule Tradehub.Model.Market do
   @derive Jason.Encoder
   defstruct [
     :base,

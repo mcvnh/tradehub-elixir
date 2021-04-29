@@ -1,4 +1,8 @@
 defmodule Tradehub.Network.Testnet do
+  @moduledoc """
+  Testnet API Client for Tradehub API
+  """
+
   use HTTPoison.Base
 
   @testnet Application.fetch_env!(:tradehub, :testnet)

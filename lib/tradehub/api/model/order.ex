@@ -1,4 +1,4 @@
-defmodule Tradehub.API.Model.Order do
+defmodule Tradehub.Model.Order do
   @derive Jason.Encoder
   defstruct [
     :address,
