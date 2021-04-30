@@ -1,7 +1,5 @@
 defmodule Tradehub.Network.Mainnet do
-  @moduledoc """
-  Mainnet API Client for Tradehub API
-  """
+  @moduledoc false
 
   use HTTPoison.Base
 

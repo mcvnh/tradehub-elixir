@@ -1,7 +1,5 @@
 defmodule Tradehub.Network.Testnet do
-  @moduledoc """
-  Testnet API Client for Tradehub API
-  """
+  @moduledoc false
 
   use HTTPoison.Base
 

@@ -1,0 +1,15 @@
+defmodule Tradehub.Trade do
+  alias Tradehub.Model
+
+  @orders Application.fetch_env!(:tradehub, :public_trade_orders)
+  @order Application.fetch_env!(:tradehub, :public_trade_order)
+  @positions Application.fetch_env!(:tradehub, :public_trade_positions)
+
+  def get_orders(account) do
+    Tradehub.get(@orders, params: %{account: String.downcase(account)})
+  end
+
+  def get_order(order_id) do
+    Tradehub.get(@order, params: %{order_id: String.upcase(order_id)})
+  end
+end
