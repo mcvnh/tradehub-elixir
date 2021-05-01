@@ -3,6 +3,7 @@ defmodule Tradehub.MixProject do
 
   def project do
     [
+      name: "Tradehub",
       app: :tradehub,
       version: "0.1.0",
       elixir: "~> 1.11",
@@ -10,8 +11,17 @@ defmodule Tradehub.MixProject do
       deps: deps(),
 
 
-      name: "Tradehub",
-      source_url: "https://github.com/anhmv/tradehub-api-elixir",
+      docs: [
+        main: "readme",
+        source_url: "https://github.com/anhmv/tradehub-api-elixir",
+        extras: ["README.md"]
+      ],
+
+      package: [
+        name: "tradehub",
+        licenses: ["MIT"],
+        links: %{"GitHub" => "https://github.com/anhmv/tradehub-api-elixir"}
+      ]
     ]
   end
 

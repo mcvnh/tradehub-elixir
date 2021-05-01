@@ -1,10 +1,6 @@
 defmodule Tradehub do
   @moduledoc """
-  Welcome to the Tradehub API Elixir project. The goal of this project is to empower other developers
-  and end users by offering a Elixir client that is able to interact with all aspects of the Tradehub
-  blockchain and DEMEX decentralized exchange via its REST/WS endpoints.
-
-  **NOTE**: This module is under development and may change drastically from each update.
+  This modules mainly focusing on defining custom types for the Tradehub response.
   """
 
   @type text :: String.t()
@@ -126,6 +122,48 @@ defmodule Tradehub do
     bids: list(orderbook_record)
   }
 
+  @type candlestick :: %{
+    close: text,
+    high: text,
+    id: integer,
+    low: text,
+    market: text,
+    open: text,
+    quote_volume: text,
+    resolution: integer,
+    time: text,
+    volume: text
+  }
+
+  @type ticker_prices :: %{
+    block_height: integer,
+    fair: text,
+    fair_index_delta_avg: text,
+    index: text,
+    index_updated_at: text,
+    last: text,
+    last_updated_at: text,
+    mark: text,
+    mark_avg: text,
+    market: text,
+    marking_strategy: text,
+    settlement: text
+  }
+
+  @type market_stats :: %{
+    day_high: text,
+    day_low: text,
+    day_open: text,
+    day_close: text,
+    day_volume: text,
+    day_quote_volume: text,
+    index_price: text,
+    mark_price: text,
+    last_price: text,
+    market: text,
+    market_type: text,
+    open_interest: text
+  }
 
   @network Application.fetch_env!(:tradehub, :network)
   @api if @network == "testnet", do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet

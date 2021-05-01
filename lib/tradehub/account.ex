@@ -59,7 +59,7 @@ defmodule Tradehub.Account do
 
   """
   def address(username) do
-    case Tradehub.get(@address, [], params: %{username: username}) do
+    case Tradehub.get(@address, params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -76,7 +76,7 @@ defmodule Tradehub.Account do
 
   """
   def username?(username) do
-    case Tradehub.get(@username_check, [], params: %{username: username}) do
+    case Tradehub.get(@username_check, params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end

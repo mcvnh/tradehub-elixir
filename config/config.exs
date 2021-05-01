@@ -20,4 +20,8 @@ config :tradehub,
   public_account: "get_account",
   public_account_profile: "get_profile",
   public_account_address: "get_address",
-  public_account_check_username: "username_check"
+  public_account_check_username: "username_check",
+
+  public_ticker_candlesticks: "candlesticks",
+  public_ticker_prices: "get_prices",
+  public_ticker_market_stats: "get_market_stats"
