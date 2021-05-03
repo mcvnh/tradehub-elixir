@@ -1,8 +1,8 @@
 defmodule Tradehub.Trade do
   alias Tradehub.Model
 
-  @orders Application.fetch_env!(:tradehub, :public_trade_orders)
   @order Application.fetch_env!(:tradehub, :public_trade_order)
+  @orders Application.fetch_env!(:tradehub, :public_trade_orders)
   @positions Application.fetch_env!(:tradehub, :public_trade_positions)
 
   def get_orders(account) do

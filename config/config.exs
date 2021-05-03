@@ -24,4 +24,15 @@ config :tradehub,
 
   public_ticker_candlesticks: "candlesticks",
   public_ticker_prices: "get_prices",
-  public_ticker_market_stats: "get_market_stats"
+  public_ticker_market_stats: "get_market_stats",
+
+  public_protocol_status: "get_status",
+  public_protocol_block_time: "get_block_time",
+  public_protocol_validators: "get_all_validators",
+  public_protocol_rewards: "get_delegation_rewards",
+  public_protocol_blocks: "get_blocks",
+  public_protocol_transactions: "get_transactions",
+  public_protocol_transaction: "get_transaction",
+  public_protocol_transaction_types: "get_transaction_types",
+  public_protocol_total_balances: "get_total_balances",
+  public_protocol_external_transfers: "get_external_transfers"

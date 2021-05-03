@@ -165,6 +165,139 @@ defmodule Tradehub do
     open_interest: text
   }
 
+  @type protocol_status :: %{
+    id: integer,
+    jsonrpc: text,
+    result: protocol_status_result :: %{
+      node_info: node_info :: %{
+        channels: text,
+        id: text,
+        listen_addr: text,
+        moniker: text,
+        network: text,
+        other: node_info :: %{
+          rpc_address: text,
+          tx_index: text
+        },
+        protocol_version: protocol_version :: %{
+          app: text,
+          block: text,
+          p2p: text
+        },
+        version: text
+      },
+      sync_info: sync_info :: %{
+        catching_up: boolean,
+        earliest_app_hash: text,
+        earliest_block_hash: text,
+        earliest_block_height: text,
+        earliest_block_time: text,
+        latest_app_hash: text,
+        latest_block_hash: text,
+        latest_block_height: text,
+        latest_block_time: text
+      },
+      validator_info: validator_info :: %{
+        address: text,
+        pub_key: pub_key :: %{
+          type: text,
+          value: text
+        },
+        voting_power: text
+      }
+    }
+  }
+
+
+  @type validator :: %{
+    BondStatus: text,
+    Commission: commission :: %{
+      commission_rates: comission_rates :: %{
+        max_change_rate: text,
+        max_rate: text,
+        rate: text
+      },
+      update_time: text
+    },
+    ConsAddress: text,
+    ConsAddressByte: text,
+    ConsPubKey: text,
+    DelegatorShares: text,
+    Description: validator_description :: %{
+      details: text,
+      identity: text,
+      moniker: text,
+      security_contact: text,
+      website: text
+    },
+    Jailed: boolean,
+    MinSelfDelegation: text,
+    OperatorAddress: text,
+    Status: text,
+    Tokens: text,
+    UnbondingCompletionTime: text,
+    UnbondingHeight: integer,
+    WalletAddress: text
+  }
+
+  @type delegation_rewards :: %{
+    height: integer,
+    result: delegation_rewards_result :: %{
+      rewards: list(delegation_result_rewards :: %{
+        validator_address: text,
+        reward: list(Tradehub.coin)
+      }),
+      total: list(coin)
+    }
+  }
+
+  @type block :: %{
+    block_height: text,
+    time: text,
+    count: text,
+    proposer_address: text
+  }
+
+  @type transaction :: %{
+    address: text,
+    block_time: text,
+    code: text,
+    gas_limit: text,
+    gas_used: text,
+    hash: text,
+    height: text,
+    id: text,
+    memo: text,
+    msg: text,
+    msg_type: text,
+    username: text
+  }
+
+  @type protocol_balance :: %{
+    available: text,
+    denom: text,
+    order: text,
+    position: text
+  }
+
+  @type transfer_record :: %{
+    address: text,
+    amount: text,
+    block_height: text,
+    blockchain: text,
+    contract_hash: text,
+    denom: text,
+    fee_address: text,
+    fee_amount: text,
+    id: text,
+    status: text,
+    symbol: text,
+    timestamp: text,
+    token_name: text,
+    transaction_hash: text,
+    transfer_type: text
+  }
+
   @network Application.fetch_env!(:tradehub, :network)
   @api if @network == "testnet", do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet
 
