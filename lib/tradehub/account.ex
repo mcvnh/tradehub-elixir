@@ -9,8 +9,6 @@ defmodule Tradehub.Account do
   @address Application.fetch_env!(:tradehub, :public_account_address)
   @username_check Application.fetch_env!(:tradehub, :public_account_check_username)
 
-
-  @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account}
   @doc """
   Request information about the given `account`.
 
@@ -22,6 +20,9 @@ defmodule Tradehub.Account do
       iex> Tradehub.Account.address("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
 
   """
+
+  @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account()}
+
   def account(account) do
     case Tradehub.get(@account, params: %{account: account}) do
       {:ok, response} -> {:ok, response.body}
@@ -29,8 +30,6 @@ defmodule Tradehub.Account do
     end
   end
 
-
-  @spec profile(Tradehub.address) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.profile}
   @doc """
   Get profile from a TradeHub Wallet.
 
@@ -39,6 +38,9 @@ defmodule Tradehub.Account do
       iex> Tradehub.Public.Account.get_profile("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
 
   """
+
+  @spec profile(Tradehub.address()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.profile()}
+
   def profile(account) do
     case Tradehub.get(@profile, params: %{account: account}) do
       {:ok, response} -> {:ok, response.body}
@@ -46,8 +48,6 @@ defmodule Tradehub.Account do
     end
   end
 
-
-  @spec address(Tradehub.text) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.address}
   @doc """
   Request the wallet address which is represented by a username.
 
@@ -58,6 +58,9 @@ defmodule Tradehub.Account do
       iex> Tradehub.Account.address("tradehub")
 
   """
+
+  @spec address(Tradehub.text()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.address()}
+
   def address(username) do
     case Tradehub.get(@address, params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}
@@ -65,8 +68,6 @@ defmodule Tradehub.Account do
     end
   end
 
-
-  @spec username?(Tradehub.text) :: {:error, HTTPoison.Error.t()} | {:ok, boolean()}
   @doc """
   Check if the given `username` has been taken.
 
@@ -75,6 +76,9 @@ defmodule Tradehub.Account do
       iex> Tradehub.Account.username?("tradehub")
 
   """
+
+  @spec username?(Tradehub.text()) :: {:error, HTTPoison.Error.t()} | {:ok, boolean()}
+
   def username?(username) do
     case Tradehub.get(@username_check, params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}

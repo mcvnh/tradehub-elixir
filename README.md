@@ -17,7 +17,7 @@ Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free T
     * [x] Exchange information
     * [ ] Trade information
     * [x] Tickers
-    * [ ] Statistics
+    * [x] Statistics
     * [x] Protocol information
     * [x] Account / Profile information
   * [ ] Private endpoints
