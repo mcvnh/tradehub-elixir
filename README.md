@@ -32,17 +32,55 @@ end
 
 ## Basic Usage
 
-Configure Tradehub network in your `config.exs`.
+Configure Tradehub network in your `config.exs` [OPTIONAL].
 
 ``` elixir
 config :tradehub,
-  network: "mainnet" # "testnet"
+  network: "https://tradescan.switcheo.org/", # default value
+  ws: "wss://ws.dem.exchange/ws" # default value
 ```
 
 Make a simple REST call to get the block time of the chain.
 
 ``` elixir
 iex(1)> Tradehub.Protocol.block_time
+```
+
+## Websocket subscribe
+
+This example will do a subscription onto the channel `market_stats`, and print out the received messages.
+
+``` elixir
+defmodule WatchMarketStats do
+  use GenServer
+
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+  ## Callbacks
+
+  def init(stack) do
+    # Start listening on the `market_stats` channel
+    Tradehub.Stream.market_stats()
+
+    # Register myself as the client to handle message from the channel
+    Phoenix.PubSub.subscribe(Tradehub.PubSub, "market_stats")
+
+    {:ok, stack}
+  end
+
+  # Handle latest message from the `market_stats` channel
+  def handle_info(msg, state) do
+    IO.puts("Receive message -- #{inspect(msg)}")
+
+    {:noreply, state}
+  end
+end
+```
+
+``` elixir
+iex(1)> WatchMarketStats.start_link {}
 ```
 
 Full documentation can be found at [https://hexdocs.pm/tradehub](https://hexdocs.pm/tradehub).
