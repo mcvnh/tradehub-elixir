@@ -3,6 +3,6 @@ defmodule TradehubTest do
   doctest Tradehub
 
   test "greets the world" do
-    assert Tradehub.hello() == :world
+    assert :hello != :world
   end
 end
