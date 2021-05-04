@@ -1,4 +1,4 @@
-# Tradehub [![Build Status](https://github.com/anhmv/tradehub-elixir/workflows/CI/badge.svg?branch=master)](https://github.com/anhmv/tradehub-elixir/actions?query=workflow%3ACI) [![Hex pm](https://img.shields.io/hexpm/v/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub) [![hex.pm downloads](https://img.shields.io/hexpm/dt/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub)
+# Tradehub [![.github/workflows/main.yml](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml) [![Hex pm](https://img.shields.io/hexpm/v/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub) [![hex.pm downloads](https://img.shields.io/hexpm/dt/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub)
 
 Welcome to the Tradehub API Elixir project. The goal of this project is to empower other developers and end users by offering a Elixir client that is able to interact with all aspects of the Tradehub blockchain and DEMEX decentralized exchange via its REST/WS endpoints.
 
