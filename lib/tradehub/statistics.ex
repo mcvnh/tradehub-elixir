@@ -1,4 +1,8 @@
 defmodule Tradehub.Statistics do
+  @moduledoc """
+  This module uses to fetch profits information of the chain.
+  """
+
   @doc """
   Get rich list of a specific token
   """

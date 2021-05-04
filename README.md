@@ -13,13 +13,7 @@ Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free T
 ## Features
 
 * [ ] Implementation of all general information endpoints
-  * [ ] Public endpoints
-    * [x] Exchange information
-    * [ ] Trade information
-    * [x] Tickers
-    * [x] Statistics
-    * [x] Protocol information
-    * [x] Account / Profile information
+  * [x] Public endpoints
   * [ ] Private endpoints
     * [ ] Authentication
     * [ ] Create order

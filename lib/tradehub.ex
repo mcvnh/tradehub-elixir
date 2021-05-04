@@ -321,6 +321,68 @@ defmodule Tradehub do
           username: text
         }
 
+  @type position :: %{
+          address: text,
+          allocated_margin_amount: text,
+          allocated_margin_denom: text,
+          closed_block_height: text,
+          closed_block_time: text,
+          created_block_height: text,
+          entry_price: text,
+          lots: text,
+          market: text,
+          realized_pnl: text,
+          type: text,
+          updated_block_height: text,
+          username: text
+        }
+
+  @type leverage :: %{
+          type: text,
+          market: text,
+          address: text,
+          leverage: text
+        }
+
+  @type trade :: %{
+          block_created_at: text,
+          block_height: text,
+          id: text,
+          liquidation: text,
+          maker_address: text,
+          maker_fee_amount: text,
+          maker_fee_denom: text,
+          maker_id: text,
+          maker_side: text,
+          maker_username: text,
+          market: text,
+          price: text,
+          quantity: text,
+          taker_address: text,
+          taker_fee_amount: text,
+          taker_fee_denom: text,
+          taker_id: text,
+          taker_side: text,
+          taker_username: text
+        }
+
+  @type account_trade :: %{
+          base_precision: text,
+          quote_precision: text,
+          fee_precision: text,
+          order_id: text,
+          market: text,
+          side: text,
+          quantity: text,
+          price: text,
+          fee_amount: text,
+          fee_denom: text,
+          address: text,
+          block_height: text,
+          block_created_at: text,
+          id: text
+        }
+
   @network Application.fetch_env!(:tradehub, :network)
   @api if @network == "testnet", do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet
 
