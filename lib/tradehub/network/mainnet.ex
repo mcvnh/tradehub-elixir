@@ -3,10 +3,8 @@ defmodule Tradehub.Network.Mainnet do
 
   use HTTPoison.Base
 
-  @mainnet Application.fetch_env!(:tradehub, :mainnet)
-
   def process_request_url(url) do
-    @mainnet <> url
+    "https://tradescan.switcheo.org/" <> url
   end
 
   def process_response_body(body) do

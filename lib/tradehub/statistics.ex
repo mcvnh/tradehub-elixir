@@ -10,7 +10,7 @@ defmodule Tradehub.Statistics do
   @spec rich_list(String.t()) :: {:ok, list(Tradehub.rich_holder())} | {:error, HTTPoison.Error.t()}
 
   def rich_list(token) do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_statistics_rich_list), params: %{token: token}) do
+    case Tradehub.get("get_rich_list", params: %{token: token}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end

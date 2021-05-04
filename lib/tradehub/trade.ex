@@ -3,19 +3,6 @@ defmodule Tradehub.Trade do
   This module uses to fetch trade, orders information of the chain.
   """
 
-  @order Application.fetch_env!(:tradehub, :public_trade_order)
-  @orders Application.fetch_env!(:tradehub, :public_trade_orders)
-  @positions Application.fetch_env!(:tradehub, :public_trade_positions)
-  @position Application.fetch_env!(:tradehub, :public_trade_position)
-
-  @positions_sorted_size Application.fetch_env!(:tradehub, :public_trade_positions_sorted_size)
-  @positions_sorted_risk Application.fetch_env!(:tradehub, :public_trade_positions_sorted_risk)
-  @positions_sorted_pnl Application.fetch_env!(:tradehub, :public_trade_positions_sorted_pnl)
-  @leverage Application.fetch_env!(:tradehub, :public_trade_leverage)
-  @trades Application.fetch_env!(:tradehub, :public_trade_trades)
-  @trades_by_account Application.fetch_env!(:tradehub, :public_trade_trades_by_account)
-  @liquidations Application.fetch_env!(:tradehub, :public_trade_liquidations)
-
   @doc """
   Requests orders of the given account
 
@@ -28,7 +15,7 @@ defmodule Tradehub.Trade do
   @spec get_orders(String.t()) :: {:ok, list(Tradehub.order())} | {:error, HTTPoison.Error.t()}
 
   def get_orders(account) do
-    case Tradehub.get(@orders, params: %{account: String.downcase(account)}) do
+    case Tradehub.get("get_orders", params: %{account: String.downcase(account)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -46,7 +33,7 @@ defmodule Tradehub.Trade do
   @spec get_order(String.t()) :: {:ok, Tradehub.order()} | {:error, HTTPoison.Error.t()}
 
   def get_order(order_id) do
-    case Tradehub.get(@order, params: %{order_id: String.upcase(order_id)}) do
+    case Tradehub.get("get_order", params: %{order_id: String.upcase(order_id)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -65,7 +52,7 @@ defmodule Tradehub.Trade do
   @doc deprecated: "The API does not well documetation, and I do not have much info about this endpoint"
 
   def positions(account) do
-    case Tradehub.get(@positions, params: %{account: String.downcase(account)}) do
+    case Tradehub.get("get_positions", params: %{account: String.downcase(account)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -84,7 +71,7 @@ defmodule Tradehub.Trade do
   @doc deprecated: "The API is not well documentation"
 
   def positions_sorted_size(market) do
-    case Tradehub.get(@positions_sorted_size, params: %{market: String.downcase(market)}) do
+    case Tradehub.get("get_positions_sorted_by_size", params: %{market: String.downcase(market)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -103,7 +90,7 @@ defmodule Tradehub.Trade do
   @doc deprecated: "The API is not well documentation"
 
   def positions_sorted_risk(market, direction) do
-    case Tradehub.get(@positions_sorted_risk, params: %{market: String.downcase(market), direction: direction}) do
+    case Tradehub.get("get_positions_sorted_by_risk", params: %{market: String.downcase(market), direction: direction}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -122,7 +109,7 @@ defmodule Tradehub.Trade do
   @doc deprecated: "The API is not well documentation"
 
   def positions_sorted_pnl(market) do
-    case Tradehub.get(@positions_sorted_pnl, params: %{market: String.downcase(market)}) do
+    case Tradehub.get("get_positions_sorted_by_pnl", params: %{market: String.downcase(market)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -140,7 +127,7 @@ defmodule Tradehub.Trade do
   @spec position(String.t(), String.t()) :: {:ok, Tradehub.position()} | {:error, HTTPoison.Error.t()}
 
   def position(account, market) do
-    case Tradehub.get(@position, params: %{account: String.downcase(account), market: String.downcase(market)}) do
+    case Tradehub.get("get_position", params: %{account: String.downcase(account), market: String.downcase(market)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -158,7 +145,7 @@ defmodule Tradehub.Trade do
   @spec leverage(String.t(), String.t()) :: {:ok, Tradehub.leverage()} | {:error, HTTPoison.Error.t()}
 
   def leverage(account, market) do
-    case Tradehub.get(@leverage, params: %{account: String.downcase(account), market: String.downcase(market)}) do
+    case Tradehub.get("get_leverage", params: %{account: String.downcase(account), market: String.downcase(market)}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -186,7 +173,7 @@ defmodule Tradehub.Trade do
           {:ok, list(Tradehub.trade())} | {:error, HTTPoison.Error.t()}
 
   def trades(market \\ nil, before_id \\ nil, after_id \\ nil, order_by \\ nil, limit \\ nil) do
-    case Tradehub.get(@trades,
+    case Tradehub.get("get_trades",
            params: %{market: market, before_id: before_id, after_id: after_id, order_by: order_by, limit: limit}
          ) do
       {:ok, response} -> {:ok, response.body}
@@ -217,7 +204,7 @@ defmodule Tradehub.Trade do
           {:ok, list(Tradehub.account_trade())} | {:error, HTTPoison.Error.t()}
 
   def trades_by_account(account, before_id \\ nil, after_id \\ nil, order_by \\ nil, limit \\ nil) do
-    case Tradehub.get(@trades_by_account,
+    case Tradehub.get("get_trades_by_account",
            params: %{account: account, before_id: before_id, after_id: after_id, order_by: order_by, limit: limit}
          ) do
       {:ok, response} -> {:ok, response.body}
@@ -247,7 +234,7 @@ defmodule Tradehub.Trade do
           {:ok, list(Tradehub.account_trade())} | {:error, HTTPoison.Error.t()}
 
   def liquidations(before_id \\ nil, after_id \\ nil, order_by \\ nil, limit \\ nil) do
-    case Tradehub.get(@liquidations,
+    case Tradehub.get("get_liquidations",
            params: %{before_id: before_id, after_id: after_id, order_by: order_by, limit: limit}
          ) do
       {:ok, response} -> {:ok, response.body}

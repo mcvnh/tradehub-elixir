@@ -24,7 +24,7 @@ defmodule Tradehub.Ticker do
 
   def candlesticks(market, resolution, from, to) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_ticker_candlesticks),
+           "candlesticks",
            params: %{
              market: market,
              resolution: resolution,
@@ -50,7 +50,7 @@ defmodule Tradehub.Ticker do
 
   def prices(market) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_ticker_prices),
+           "get_prices",
            params: %{market: market}
          ) do
       {:ok, response} -> {:ok, response.body}
@@ -75,7 +75,7 @@ defmodule Tradehub.Ticker do
 
   def market_stats(market \\ nil) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_ticker_market_stats),
+           "get_market_stats",
            params: %{market: market}
          ) do
       {:ok, response} -> {:ok, response.body}

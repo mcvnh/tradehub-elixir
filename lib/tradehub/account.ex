@@ -4,11 +4,6 @@ defmodule Tradehub.Account do
   on the account and profile information.
   """
 
-  @account Application.fetch_env!(:tradehub, :public_account)
-  @profile Application.fetch_env!(:tradehub, :public_account_profile)
-  @address Application.fetch_env!(:tradehub, :public_account_address)
-  @username_check Application.fetch_env!(:tradehub, :public_account_check_username)
-
   @doc """
   Request information about the given `account`.
 
@@ -24,7 +19,7 @@ defmodule Tradehub.Account do
   @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account()}
 
   def account(account) do
-    case Tradehub.get(@account, params: %{account: account}) do
+    case Tradehub.get("get_account", params: %{account: account}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -42,7 +37,7 @@ defmodule Tradehub.Account do
   @spec profile(Tradehub.address()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.profile()}
 
   def profile(account) do
-    case Tradehub.get(@profile, params: %{account: account}) do
+    case Tradehub.get("get_profile", params: %{account: account}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -62,7 +57,7 @@ defmodule Tradehub.Account do
   @spec address(Tradehub.text()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.address()}
 
   def address(username) do
-    case Tradehub.get(@address, params: %{username: username}) do
+    case Tradehub.get("get_address", params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -80,7 +75,7 @@ defmodule Tradehub.Account do
   @spec username?(Tradehub.text()) :: {:error, HTTPoison.Error.t()} | {:ok, boolean()}
 
   def username?(username) do
-    case Tradehub.get(@username_check, params: %{username: username}) do
+    case Tradehub.get("username_check", params: %{username: username}) do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end

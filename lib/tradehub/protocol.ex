@@ -15,7 +15,7 @@ defmodule Tradehub.Protocol do
   @spec status :: {:ok, Tradehub.protocol_status()} | {:error, HTTPoison.Error.t()}
 
   def status do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_protocol_status)) do
+    case Tradehub.get("get_status") do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -32,7 +32,7 @@ defmodule Tradehub.Protocol do
   @spec block_time :: {:ok, String.t()} | {:error, HTTPoison.Error.t()}
 
   def block_time do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_protocol_block_time)) do
+    case Tradehub.get("get_block_time") do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -50,7 +50,7 @@ defmodule Tradehub.Protocol do
   @spec validators :: {:ok, list(Tradehub.validator())} | {:error, HTTPoison.Error.t()}
 
   def validators do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_protocol_validators)) do
+    case Tradehub.get("get_all_validators") do
       {:ok, response} -> {:ok, response}
       other -> other
     end
@@ -69,7 +69,7 @@ defmodule Tradehub.Protocol do
 
   def delegation_rewards(account) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_protocol_rewards),
+           "get_delegation_rewards",
            params: %{account: account}
          ) do
       {:ok, response} -> {:ok, response.body}
@@ -100,7 +100,7 @@ defmodule Tradehub.Protocol do
 
   def blocks(before_id \\ nil, after_id \\ nil, order_by \\ nil, proposer \\ nil, limit \\ nil) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_protocol_blocks),
+           "get_blocks",
            params: %{
              before_id: before_id,
              after_id: after_id,
@@ -161,7 +161,7 @@ defmodule Tradehub.Protocol do
         limit \\ nil
       ) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_protocol_transactions),
+           "get_transactions",
            params: %{
              address: address,
              msg_type: msg_type,
@@ -192,7 +192,7 @@ defmodule Tradehub.Protocol do
 
   def transaction(hash) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_protocol_transaction),
+           "get_transaction",
            params: %{hash: hash}
          ) do
       {:ok, response} -> {:ok, response.body}
@@ -212,7 +212,7 @@ defmodule Tradehub.Protocol do
   @spec transaction_types :: {:ok, list(String.t())} | {:error, HTTPoison.Error.t()}
 
   def transaction_types do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_protocol_transaction_types)) do
+    case Tradehub.get("get_transaction_types") do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -230,7 +230,7 @@ defmodule Tradehub.Protocol do
   @spec total_balances :: {:ok, list(Tradehub.protocol_balance())} | {:error, HTTPoison.Error.t()}
 
   def total_balances do
-    case Tradehub.get(Application.fetch_env!(:tradehub, :public_protocol_total_balances)) do
+    case Tradehub.get("get_total_balances") do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -249,7 +249,7 @@ defmodule Tradehub.Protocol do
 
   def external_transfers(account) do
     case Tradehub.get(
-           Application.fetch_env!(:tradehub, :public_protocol_external_transfers),
+           "get_external_transfers",
            params: %{account: account}
          ) do
       {:ok, response} -> {:ok, response}
