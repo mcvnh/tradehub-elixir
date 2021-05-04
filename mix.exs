@@ -6,18 +6,15 @@ defmodule Tradehub.MixProject do
       name: "Tradehub",
       app: :tradehub,
       description: "Tradehub API wrapper",
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-
-
       docs: [
         main: "readme",
         source_url: "https://github.com/anhmv/tradehub-api-elixir",
         extras: ["README.md"]
       ],
-
       package: [
         name: "tradehub",
         licenses: ["MIT"],
