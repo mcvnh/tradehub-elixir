@@ -7,7 +7,7 @@ defmodule Tradehub.MixProject do
       app: :tradehub,
       description: "Tradehub API",
       version: "0.1.2",
-      elixir: "~> 1.11",
+      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: [
