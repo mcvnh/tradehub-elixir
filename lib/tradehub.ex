@@ -387,11 +387,6 @@ defmodule Tradehub do
   @api if @network == "testnet", do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet
 
   @doc false
-  def start do
-    @api.start
-  end
-
-  @doc false
   def get(url, options \\ [], headers \\ []) do
     @api.get(url, headers, options)
   end

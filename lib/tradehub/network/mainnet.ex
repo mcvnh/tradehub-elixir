@@ -11,6 +11,6 @@ defmodule Tradehub.Network.Mainnet do
 
   def process_response_body(body) do
     body
-    |> Jason.decode!()
+    |> Jason.decode!(keys: :atoms!)
   end
 end

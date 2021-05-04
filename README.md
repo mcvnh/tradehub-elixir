@@ -14,6 +14,7 @@ Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free T
 
 * [ ] Implementation of all general information endpoints
   * [x] Public endpoints
+  * [x] Websocket
   * [ ] Private endpoints
     * [ ] Authentication
     * [ ] Create order
@@ -24,4 +25,3 @@ Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free T
     * [ ] Send tokens
     * [ ] Withdraw tokens
     * [ ] Edit profile
-  * [ ] Websocket
