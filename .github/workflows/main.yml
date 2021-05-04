@@ -2,6 +2,8 @@ name: CI
 
 on: [push, pull_request]
 
+experimental-otp: true
+
 jobs:
   format:
     name: Format and compile with warnings as errors
