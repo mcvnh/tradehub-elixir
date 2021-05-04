@@ -9,10 +9,12 @@ defmodule Tradehub.Stream do
   use WebSockex
   require Logger
 
+  @ws Application.get_env(:tradehub, :ws, "wss://ws.dem.exchange/ws")
+
   @doc false
   @spec start_link(any) :: {:error, any} | {:ok, pid}
   def start_link(state) do
-    WebSockex.start_link(Application.fetch_env!(:tradehub, :ws), __MODULE__, state, name: Stream)
+    WebSockex.start_link(@ws, __MODULE__, state, name: Stream)
   end
 
   def handle_frame({_type, msg}, state) do

@@ -1,10 +1,12 @@
-defmodule Tradehub.Network.Testnet do
+defmodule Tradehub.Net do
   @moduledoc false
 
   use HTTPoison.Base
 
+  @network Application.get_env(:tradehub, :network, "https://tradescan.switcheo.org/")
+
   def process_request_url(url) do
-    "https://test-tradescan.switcheo.org/" <> url
+    @network <> url
   end
 
   def process_response_body(body) do

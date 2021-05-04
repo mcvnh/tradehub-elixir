@@ -383,11 +383,8 @@ defmodule Tradehub do
           id: text
         }
 
-  @network Application.fetch_env!(:tradehub, :network)
-  @api if @network == :testnet, do: Tradehub.Network.Testnet, else: Tradehub.Network.Mainnet
-
   @doc false
   def get(url, options \\ [], headers \\ []) do
-    @api.get(url, headers, options)
+    Tradehub.Net.get(url, headers, options)
   end
 end
