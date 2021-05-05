@@ -22,8 +22,8 @@ defmodule Tradehub.Wallet do
     |> Tradehub.Mnemonic.mnemonic_to_seed()
     |> String.upcase()
     |> Base.decode16!()
-    |> Tradehub.BIP32.master()
-    |> Tradehub.BIP32.derive_path("m/44'/118'/0'/0/0")
+    |> ExtendedKey.master()
+    |> ExtendedKey.derive_path("m/44'/118'/0'/0/0")
     |> Map.get(:key)
   end
 
