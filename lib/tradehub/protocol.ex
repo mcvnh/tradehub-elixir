@@ -51,7 +51,7 @@ defmodule Tradehub.Protocol do
 
   def validators do
     case Tradehub.get("get_all_validators") do
-      {:ok, response} -> {:ok, response}
+      {:ok, response} -> {:ok, response.body}
       other -> other
     end
   end
@@ -252,7 +252,7 @@ defmodule Tradehub.Protocol do
            "get_external_transfers",
            params: %{account: account}
          ) do
-      {:ok, response} -> {:ok, response}
+      {:ok, response} -> {:ok, response.body}
       other -> other
     end
   end

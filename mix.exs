@@ -10,6 +10,13 @@ defmodule Tradehub.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       docs: [
         main: "readme",
         source_url: "https://github.com/anhmv/tradehub-elixir",
@@ -38,7 +45,8 @@ defmodule Tradehub.MixProject do
       {:jason, "~> 1.2.2"},
       {:websockex, "~> 0.4.3"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 end

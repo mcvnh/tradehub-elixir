@@ -12,7 +12,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Account.address("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
+      iex> Tradehub.Account.account("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
 
   """
 

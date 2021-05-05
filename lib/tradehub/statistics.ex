@@ -5,6 +5,11 @@ defmodule Tradehub.Statistics do
 
   @doc """
   Get rich list of a specific token
+
+  ## Examples
+
+      iex> Tradehub.Statistics.rich_list("swth")
+
   """
 
   @spec rich_list(String.t()) :: {:ok, list(Tradehub.rich_holder())} | {:error, HTTPoison.Error.t()}
@@ -18,6 +23,11 @@ defmodule Tradehub.Statistics do
 
   @doc """
   Get top returns profit of the given market
+
+  ## Examples
+
+      iex> Tradehub.Statistics.top_r_profits("swth_eth1")
+
   """
 
   @spec top_r_profits(String.t()) :: {:ok, String.t()}
