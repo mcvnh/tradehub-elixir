@@ -1,6 +1,9 @@
 # Tradehub
 
-[![.github/workflows/main.yml](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml) [![Hex pm](https://img.shields.io/hexpm/v/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub) [![hex.pm downloads](https://img.shields.io/hexpm/dt/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub)
+[![.github/workflows/main.yml](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/anhmv/tradehub-elixir/actions/workflows/main.yml)
+[![Coverage Status](https://coveralls.io/repos/github/anhmv/tradehub-elixir/badge.svg?branch=master)](https://coveralls.io/github/anhmv/tradehub-elixir?branch=master)
+[![Hex pm](https://img.shields.io/hexpm/v/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub)
+[![hex.pm downloads](https://img.shields.io/hexpm/dt/tradehub.svg?style=flat)](https://hex.pm/packages/tradehub)
 
 ---
 
@@ -25,7 +28,7 @@ The package can be installed by adding `tradehub` to your dependencies in `mix.e
 ``` elixir
 def deps do
   [
-    {:tradehub, "~> 0.1.3"}
+    {:tradehub, "~> 0.1.5"}
   ]
 end
 ```
