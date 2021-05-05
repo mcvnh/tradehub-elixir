@@ -148,7 +148,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "balances.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.balances("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
-      iex> Tradehub.Stream.subscribe "balances.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
+      iex> Tradehub.Stream.unsubscribe "balances.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
