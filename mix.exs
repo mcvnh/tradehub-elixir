@@ -7,7 +7,7 @@ defmodule Tradehub.MixProject do
       app: :tradehub,
       description: "Tradehub SDK for Elixir",
       version: "0.1.5",
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
@@ -34,13 +34,16 @@ defmodule Tradehub.MixProject do
   def application do
     [
       mod: {Tradehub.App, []},
-      extra_applications: [:logger, :httpoison, :websockex]
+      extra_applications: [:logger, :crypto, :httpoison, :websockex]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:mnemonic, "~> 0.3.0"},
+      {:extended_key, "~> 0.3.0"},
+      {:bech32, "~> 1.0.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.2.2"},
       {:websockex, "~> 0.4.3"},

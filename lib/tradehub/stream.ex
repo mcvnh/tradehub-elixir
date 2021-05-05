@@ -117,7 +117,7 @@ defmodule Tradehub.Stream do
   def account_trades(account), do: subscribe("account_trades.#{account}")
 
   @doc """
-  Subscribes to the `account_trades_by_market.[market].[account]` channel to request trades of the given account inside a market.
+  Subscribes to the `account_trades_by_market.[market].[account]` channel to request trades of the given account within a market.
 
   A topic named `account_trades_by_market.[market].[account]` in the `Tradehub.PubSub` will automatically created to
   handle incomming messages of this subscription.
@@ -178,7 +178,7 @@ defmodule Tradehub.Stream do
 
   @doc """
   Subscribes to the `leverages_by_market.[market].[account]` channel to request latest leverages information of the
-  given account inside a market.
+  given account within a market.
 
   A topic named `leverages_by_market.[market].[account]` in the `Tradehub.PubSub` will automatically created to
   handle incomming messages of this subscription.
