@@ -11,6 +11,13 @@ defmodule Tradehub.Net do
 
   def process_response_body(body) do
     body
-    |> Jason.decode!(keys: :atoms!)
+    |> decode_response()
+  end
+
+  defp decode_response(body) do
+    case Jason.decode(body, keys: :atoms) do
+      {:ok, data} -> data
+      {:error, error} -> error.data
+    end
   end
 end

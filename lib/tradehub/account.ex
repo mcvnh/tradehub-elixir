@@ -30,7 +30,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Public.Account.get_profile("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
+      iex> Tradehub.Account.profile("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
 
   """
 

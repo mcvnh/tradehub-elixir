@@ -23,7 +23,7 @@ defmodule Tradehub.Stream do
     case Map.has_key?(decode_msg, :channel) do
       true ->
         Phoenix.PubSub.broadcast(Tradehub.PubSub, decode_msg.channel, decode_msg)
-        Logger.info("Broadcast message to channel #{decode_msg.channel}")
+        Logger.debug("Broadcast message to channel #{decode_msg.channel}")
         {:ok, state}
 
       false ->
@@ -32,7 +32,7 @@ defmodule Tradehub.Stream do
   end
 
   def handle_cast({:send, {type, msg} = frame}, state) do
-    Logger.info("Sending #{type} frame with payload: #{msg}")
+    Logger.debug("Sending #{type} frame with payload: #{msg}")
     {:reply, frame, state}
   end
 
@@ -59,7 +59,7 @@ defmodule Tradehub.Stream do
 
     case WebSockex.send_frame(Stream, frame) do
       :ok ->
-        Logger.info("Starting subscribe messages on channel #{channel_uri}")
+        Logger.debug("Starting subscribe messages on channel #{channel_uri}")
         :ok
 
       other ->
@@ -88,7 +88,7 @@ defmodule Tradehub.Stream do
 
     case WebSockex.send_frame(Stream, frame) do
       :ok ->
-        Logger.info("Stopping subscribe messages on channel #{channel_uri}")
+        Logger.debug("Stopping subscribe messages on channel #{channel_uri}")
         :ok
 
       other ->
@@ -108,6 +108,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "account_trades.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.account_trades("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "account_trades.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -127,6 +128,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "account_trades_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.account_trades_by_market("swth_eth1", "swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "account_trades.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -146,6 +148,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "balances.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.balances("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.subscribe "balances.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -165,6 +168,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "candlesticks.swth_eth1.30"
       iex> Tradehub.Stream.candlesticks("swth_eth1", 30)
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "candlesticks.swth_eth1.30"
 
   """
 
@@ -185,6 +189,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "leverages_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.leverages_by_market("swth_eth1", "swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "leverages_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -204,6 +209,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "leverages.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.leverages("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "leverages.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -223,6 +229,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "market_stats"
       iex> Tradehub.Stream.market_stats
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "market_stats"
 
   """
 
@@ -242,6 +249,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "books.swth_eth1"
       iex> Tradehub.Stream.books("swth_eth1")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "books.swth_eth1"
 
   """
 
@@ -262,6 +270,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "orders_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.orders_by_market("swth_eth1", "swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "orders_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -281,6 +290,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "orders.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.orders("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "orders.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -301,6 +311,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "positions_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.positions_by_market("swth_eth1", "swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "positions_by_market.swth_eth1.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -320,6 +331,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "positions.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
       iex> Tradehub.Stream.positions("swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "positions.swth1gdm8rvlfxjapvh2paswx7td9fcrq3r7cavkd2a"
 
   """
 
@@ -339,6 +351,7 @@ defmodule Tradehub.Stream do
       iex> PubSub.subscribe Tradehub.PubSub, "recent_trades.swth_eth1"
       iex> Tradehub.Stream.recent_trades("swth_eth1")
       iex> Process.info(self(), :messages)
+      iex> Tradehub.Stream.unsubscribe "recent_trades.swth_eth1"
 
   """
 
