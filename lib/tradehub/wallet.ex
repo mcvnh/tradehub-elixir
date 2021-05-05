@@ -19,11 +19,11 @@ defmodule Tradehub.Wallet do
 
   def private_key_from_mnemonic(mnemonic) do
     mnemonic
-    |> Mnemonic.mnemonic_to_seed()
+    |> Tradehub.Mnemonic.mnemonic_to_seed()
     |> String.upcase()
     |> Base.decode16!()
-    |> ExtendedKey.master()
-    |> ExtendedKey.derive_path("m/44'/118'/0'/0/0")
+    |> Tradehub.BIP32.master()
+    |> Tradehub.BIP32.derive_path("m/44'/118'/0'/0/0")
     |> Map.get(:key)
   end
 
@@ -55,7 +55,8 @@ defmodule Tradehub.Wallet do
 
   """
 
-  @spec public_key_from_private_key(String.t() | bitstring()) :: {:ok, String.t()} | {:error, String.t()}
+  @spec public_key_from_private_key(String.t() | bitstring()) ::
+          {:ok, String.t()} | {:error, String.t()}
 
   def public_key_from_private_key(private_key) do
     {:ok, private_key} = normalize_hex_string(private_key)
@@ -111,7 +112,8 @@ defmodule Tradehub.Wallet do
 
   """
 
-  @spec address_from_private_key(String.t() | bitstring(), atom()) :: {:ok, String.t()} | {:error, String.t()}
+  @spec address_from_private_key(String.t() | bitstring(), atom()) ::
+          {:ok, String.t()} | {:error, String.t()}
 
   def address_from_private_key(private_key, network \\ :mainnet) do
     {:ok, private_key} = normalize_hex_string(private_key)
@@ -164,12 +166,14 @@ defmodule Tradehub.Wallet do
       iex> Tradehub.Wallet.create_wallet(:testnet)
   """
 
-  @spec create_wallet(atom()) :: %{mnemonic: _ :: String.t(), private_key: _ :: String.t(), address: _ :: String.t()}
+  @spec create_wallet(atom()) :: %{
+          mnemonic: _ :: String.t(),
+          private_key: _ :: String.t(),
+          address: _ :: String.t()
+        }
 
   def create_wallet(network \\ :mainnet) do
-    mnemonic = Mnemonic.generate()
-
-    IO.puts(mnemonic)
+    mnemonic = Tradehub.Mnemonic.generate()
 
     private_key =
       private_key_from_mnemonic(mnemonic)
