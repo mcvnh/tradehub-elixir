@@ -220,10 +220,11 @@ defmodule Tradehub.Wallet do
       {:ok, public_key} ->
         {:ok, address} = address_from_private_key(private_key, network)
 
-        wallet = %Tradehub.Wallet{
+        wallet = %__MODULE__{
           private_key: private_key,
           public_key: public_key,
-          address: address
+          address: address,
+          network: network
         }
 
         {:ok, wallet}
@@ -310,6 +311,7 @@ defmodule Tradehub.Wallet do
   end
 
   def encode_object_in_alphanumeric_key_order(obj), do: Jason.encode!(obj)
+
   ## Private functions
 
   defp normalize_hex_string(string) do
