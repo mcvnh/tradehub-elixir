@@ -39,8 +39,9 @@ Configure Tradehub network in your `config.exs` [OPTIONAL].
 
 ``` elixir
 config :tradehub,
-  network: "https://tradescan.switcheo.org/", # default value
-  ws: "wss://ws.dem.exchange/ws" # default value
+  network: :testnet # default for dev, test
+  rest: "https://tradescan.switcheo.org/", # default
+  ws: "wss://ws.dem.exchange/ws" # default
 ```
 
 Make a simple REST call to get the block time of the chain.

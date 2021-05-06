@@ -3,10 +3,10 @@ defmodule Tradehub.Net do
 
   use HTTPoison.Base
 
-  @network Application.get_env(:tradehub, :network, "https://tradescan.switcheo.org/")
+  @rest Application.get_env(:tradehub, :rest, "https://tradescan.switcheo.org/")
 
   def process_request_url(url) do
-    @network <> url
+    @rest <> url
   end
 
   def process_response_body(body) do

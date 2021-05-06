@@ -5,14 +5,21 @@ defmodule Tradehub.Wallet do
 
   require Logger
 
-  @type __MODULE__ :: %{
+  @network Application.get_env(:tradehub, :network, :testnet)
+
+  @type t :: %__MODULE__{
           mnemonic: String.t(),
           private_key: String.t(),
           public_key: String.t(),
-          address: String.t()
+          address: String.t(),
+          network: atom()
         }
 
-  defstruct [:mnemonic, :private_key, :public_key, :address]
+  defstruct mnemonic: "",
+            private_key: <<>>,
+            public_key: <<>>,
+            address: "",
+            network: @network
 
   @doc """
    Look for the private key based on the given mnemonic phrase.
@@ -79,16 +86,16 @@ defmodule Tradehub.Wallet do
   ## Examples
 
       iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
-      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
-
-      iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
+
+      iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
+      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
 
   """
 
   @spec address_from_mnemonic(String.t(), atom()) :: {:ok, String.t()} | {:error, String.t()}
 
-  def address_from_mnemonic(mnemonic, network \\ :mainnet) do
+  def address_from_mnemonic(mnemonic, network \\ @network) do
     case public_key_from_mnemonic(mnemonic) do
       {:ok, public_key} ->
         sha = :crypto.hash(:sha256, public_key)
@@ -111,20 +118,20 @@ defmodule Tradehub.Wallet do
   ## Examples
 
       iex> Tradehub.Wallet.address_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
-      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
+      {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
 
       iex> Tradehub.Wallet.address_from_private_key(<<21, 31, 133, 212, 19, 88, 245, 109, 20, 190, 196, 132, 108, 83, 112, 163, 174, 79, 52, 222, 203, 167, 29, 72, 254, 172, 117, 236, 191, 108, 140, 161>>)
-      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
-
-      iex> Tradehub.Wallet.address_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
+
+      iex> Tradehub.Wallet.address_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1", :mainnet)
+      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
 
   """
 
   @spec address_from_private_key(String.t() | bitstring(), atom()) ::
           {:ok, String.t()} | {:error, String.t()}
 
-  def address_from_private_key(private_key, network \\ :mainnet) do
+  def address_from_private_key(private_key, network \\ @network) do
     {:ok, private_key} = normalize_hex_string(private_key)
     {:ok, public_key} = public_key_from_private_key(private_key)
 
@@ -137,19 +144,19 @@ defmodule Tradehub.Wallet do
   ## Examples
 
       iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23")
-      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
+      {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
 
       iex> Tradehub.Wallet.address_from_public_key(<<2, 230, 25, 59, 87, 182, 114, 223, 41, 153, 127, 228, 149, 215, 139, 79, 211, 234, 174, 157, 170, 224, 165, 226, 128, 49, 41, 226, 194, 27, 80, 78, 35>>)
-      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
-
-      iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
+
+      iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23", :mainnet)
+      {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
 
   """
 
   @spec address_from_public_key(String.t(), atom()) :: {:ok, String.t()} | {:error, String.t()}
 
-  def address_from_public_key(public_key, network \\ :mainnet) do
+  def address_from_public_key(public_key, network \\ @network) do
     {:ok, public_key} = normalize_hex_string(public_key)
 
     sha = :crypto.hash(:sha256, public_key)
@@ -173,11 +180,12 @@ defmodule Tradehub.Wallet do
       iex> Tradehub.Wallet.create_wallet
 
       iex> Tradehub.Wallet.create_wallet(:testnet)
+
   """
 
-  @spec create_wallet(atom()) :: %Tradehub.Wallet{}
+  @spec create_wallet(atom()) :: Tradehub.Wallet.t()
 
-  def create_wallet(network \\ :mainnet) do
+  def create_wallet(network \\ @network) do
     mnemonic = Tradehub.Mnemonic.generate()
 
     private_key =
@@ -205,9 +213,9 @@ defmodule Tradehub.Wallet do
 
   """
 
-  @spec from_private_key(String.t(), atom()) :: {:ok, %Tradehub.Wallet{}} | {:error, String.t()}
+  @spec from_private_key(String.t(), atom()) :: {:ok, Tradehub.Wallet.t()} | {:error, String.t()}
 
-  def from_private_key(private_key, network \\ :mainnet) do
+  def from_private_key(private_key, network \\ @network) do
     case public_key_from_private_key(private_key) do
       {:ok, public_key} ->
         {:ok, address} = address_from_private_key(private_key, network)
@@ -231,9 +239,9 @@ defmodule Tradehub.Wallet do
 
   """
 
-  @spec from_mnemonic(String.t(), atom()) :: {:ok, %Tradehub.Wallet{}} | {:error, String.t()}
+  @spec from_mnemonic(String.t(), atom()) :: {:ok, Tradehub.Wallet.t()} | {:error, String.t()}
 
-  def from_mnemonic(mnemonic, network \\ :mainnet) do
+  def from_mnemonic(mnemonic, network \\ @network) do
     private_key = private_key_from_mnemonic(mnemonic)
 
     from_private_key(private_key, network)
