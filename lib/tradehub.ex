@@ -454,7 +454,7 @@ defmodule Tradehub do
     Tradehub.Net.get(url, headers, options)
   end
 
-  def send(url, body, options \\ [], headers \\ []) do
-    Tradehub.Net.post(url, body, headers, options)
+  def send(body, options \\ [], headers \\ []) do
+    Tradehub.Net.post("txs", body, headers, options)
   end
 end

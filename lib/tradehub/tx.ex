@@ -1,4 +1,27 @@
+# clumb twenty either puppy thank liquid vital rigid tide tragic flash elevator
+# VAib7NRsfnc1aJPvA2JpRKqr4s7kUfwYzrjuQZa1z6ok2MaN9tjgNvjN3Xz3FGmE7RRsapL3sx7CH5bP5xwc3KKVuxj4R5B1L85oRym2DdmjPSDewD2ZyDjUsWum2SVGmwsWnh3s5xFTGZ2dxMq51CLnvG46BZk5GHjXeNBGdrFDPAeFKC9jQVcd7kh43EBWNVs6trTw7r3KZAkXHSEzase2NN7K2W4pbEqacn4Vyu1BGnRAoo6H6mwBCrXgcSNH4c4qWFrTcqERPT6MULB1anMbzQkaJ7kkC8JDmYq5xRMXmZWRTL67EXGR3x39xqvWvgpgFS8MwqKuiudzmMbCFwEANMu9ZHomaBc6UsXWNi1SeRJ
+# 123456!aA
+# 2xbEeBv7aAGZoRJgSroghd4rFUJqnz3d1qspPLTEcFwT3pquaUB6uy2fSy7MPuZgPFrqV1KcCzqbdy9nCddCN9yMpkmwHYLfiNWMLaYSWB1W8MdmCGDNLYif31TJDhQxQ6d8ArkBhf6NCwW6v5Yezh99b7MuJPZNjaBVJ9vWA7F2hbHBvH93G3yZxAQpzQ1xieimYvwUKfv7e2BQXJjqYE4zPkUNKrLp8jVB9k299bpoFR6F134ZCXyGwsm4wJGAN5wpBVJadZDetfM27vQbBzumsVyHZTDVbqqB5U8qVW1ewM1JoUBCwhyr8uDQ4hkdQtVgo6djT7W3hA1o5BvMGqVa2nd1Ngh4ik
+# second enter wire knee dial save code during ankle grape estate run
 defmodule Tradehub.Tx do
+  def test do
+    {:ok, wallet} =
+      Tradehub.Wallet.from_mnemonic("clumb twenty either puppy thank liquid vital rigid tide tragic flash elevator")
+
+    message = %{
+      type: "profile/UpdateProfile",
+      value: %{
+        User: "my_name_is_cool",
+        Twitter: "swth_eth1",
+        Originator: wallet.address
+      }
+    }
+
+    tx = build(message, wallet) |> Jason.encode!()
+
+    Tradehub.send(tx)
+  end
+
   @doc """
   Build a package for broadcasting arcoss the chain, the package includes the given messages, and signed
   by using the private key of the given tradehub Wallet
@@ -73,12 +96,12 @@ defmodule Tradehub.Tx do
       sequence: sequence
     }
 
-    sign = Tradehub.Wallet.sign(signing_message, wallet)
+    {:ok, sign} = Tradehub.Wallet.sign(signing_message, wallet)
 
     signature = %{
       pub_key: %{
         type: "tendermint/PubKeySecp256k1",
-        value: wallet.private_key |> Base.encode64()
+        value: wallet.public_key |> Base.encode64()
       },
       signature: sign
     }
@@ -98,7 +121,7 @@ defmodule Tradehub.Tx do
         gas: "100000000000"
       },
       msg: messages,
-      signature: [signature],
+      signatures: [signature],
       memo: tx_memo
     }
 
@@ -108,7 +131,16 @@ defmodule Tradehub.Tx do
   defp build_tx({tx, mode}) do
     %{
       mode: Atom.to_string(mode),
-      tx: tx
+      tx: tx,
+      fee: %{
+        amount: [
+          %{
+            denom: "swth",
+            amount: "100000000"
+          }
+        ],
+        gas: "100000000000"
+      }
     }
   end
 end

@@ -186,7 +186,7 @@ defmodule Tradehub.Wallet do
   @spec create_wallet(atom()) :: Tradehub.Wallet.t()
 
   def create_wallet(network \\ @network) do
-    mnemonic = Tradehub.Mnemonic.generate()
+    mnemonic = Tradehub.Mnemonic.generate(128)
 
     private_key =
       private_key_from_mnemonic(mnemonic)
@@ -236,7 +236,13 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      iex> wallet.address
+      "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
+
+      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
+      iex> wallet.address
+      "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"
 
   """
 
