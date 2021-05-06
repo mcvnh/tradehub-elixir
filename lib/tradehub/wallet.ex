@@ -5,6 +5,15 @@ defmodule Tradehub.Wallet do
 
   require Logger
 
+  @type __MODULE__ :: %{
+          mnemonic: String.t(),
+          private_key: String.t(),
+          public_key: String.t(),
+          address: String.t()
+        }
+
+  defstruct [:mnemonic, :private_key, :public_key, :address]
+
   @doc """
    Look for the private key based on the given mnemonic phrase.
 
@@ -166,11 +175,7 @@ defmodule Tradehub.Wallet do
       iex> Tradehub.Wallet.create_wallet(:testnet)
   """
 
-  @spec create_wallet(atom()) :: %{
-          mnemonic: _ :: String.t(),
-          private_key: _ :: String.t(),
-          address: _ :: String.t()
-        }
+  @spec create_wallet(atom()) :: %Tradehub.Wallet{}
 
   def create_wallet(network \\ :mainnet) do
     mnemonic = Tradehub.Mnemonic.generate()
@@ -180,15 +185,123 @@ defmodule Tradehub.Wallet do
       |> Base.encode16()
       |> String.downcase()
 
+    {:ok, public_key} = public_key_from_private_key(private_key)
     {:ok, address} = address_from_private_key(private_key, network)
 
-    %{
+    %Tradehub.Wallet{
       mnemonic: mnemonic,
       private_key: private_key,
+      public_key: public_key,
       address: address
     }
   end
 
+  @doc """
+  Open a wallet based on its private key.
+
+  ## Examples
+
+      iex> Tradehub.Wallet.from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
+
+  """
+
+  @spec from_private_key(String.t(), atom()) :: {:ok, %Tradehub.Wallet{}} | {:error, String.t()}
+
+  def from_private_key(private_key, network \\ :mainnet) do
+    case public_key_from_private_key(private_key) do
+      {:ok, public_key} ->
+        {:ok, address} = address_from_private_key(private_key, network)
+
+        wallet = %Tradehub.Wallet{
+          private_key: private_key,
+          public_key: public_key,
+          address: address
+        }
+
+        {:ok, wallet}
+    end
+  end
+
+  @doc """
+  Open a wallet based on its mnemonic.
+
+  ## Examples
+
+      iex> Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+
+  """
+
+  @spec from_mnemonic(String.t(), atom()) :: {:ok, %Tradehub.Wallet{}} | {:error, String.t()}
+
+  def from_mnemonic(mnemonic, network \\ :mainnet) do
+    private_key = private_key_from_mnemonic(mnemonic)
+
+    from_private_key(private_key, network)
+  end
+
+  @doc """
+  Sign the given message by using a wallet private key, and verify the signed messaged by using the wallet public key.
+
+  Due to the nature of blockchain, the message will sign by the curve digital signature algorithm (ECDSA), with curve
+  is `secp256k1` and the hash algorithm is `sha256`.
+
+  ## Examples
+
+      iex> wallet = Tradehub.Wallet.create_wallet()
+      iex> Tradehub.Wallet.sign(%{message: "hello world"}, wallet)
+
+  """
+
+  @spec sign(map(), %Tradehub.Wallet{}) :: {:ok, String.t()} | {:error, String.t()}
+
+  def sign(message, wallet) do
+    message_with_correct_keys_order = encode_object_in_alphanumeric_key_order(message)
+
+    {:ok, private_key} = normalize_hex_string(wallet.private_key)
+    {:ok, public_key} = normalize_hex_string(wallet.public_key)
+
+    signature = :crypto.sign(:ecdsa, :sha256, message_with_correct_keys_order, [private_key, :secp256k1])
+    verify = :crypto.verify(:ecdsa, :sha256, message_with_correct_keys_order, signature, [public_key, :secp256k1])
+
+    case verify do
+      true -> {:ok, signature |> Base.encode64()}
+      false -> {:error, "Cannot verify the message"}
+    end
+  end
+
+  @doc ~S"""
+  Encode a map to JSON with all of the keys in alphabetical order (nested included).
+
+  ## Examples
+
+      iex> Tradehub.Wallet.encode_object_in_alphanumeric_key_order(%{b: 1, c: 2, a: 3, d: 4})
+      "{\"a\":3,\"b\":1,\"c\":2,\"d\":4}"
+
+      iex> Tradehub.Wallet.encode_object_in_alphanumeric_key_order(%{b: %{e: 1, f: 2}, c: 2, a: 3, d: 4})
+      "{\"a\":3,\"b\":{\"e\":1,\"f\":2},\"c\":2,\"d\":4}"
+
+      iex> Tradehub.Wallet.encode_object_in_alphanumeric_key_order("")
+      "\"\""
+
+  """
+
+  def encode_object_in_alphanumeric_key_order(obj) when is_map(obj) do
+    az_keys = obj |> Map.keys() |> Enum.sort()
+
+    iodata = [
+      "{",
+      Enum.map(az_keys, fn k ->
+        v = obj[k]
+        [Jason.encode!(k), ":", encode_object_in_alphanumeric_key_order(v)]
+      end)
+      |> Enum.intersperse(","),
+      "}"
+    ]
+
+    IO.iodata_to_binary(iodata)
+  end
+
+  def encode_object_in_alphanumeric_key_order(obj), do: Jason.encode!(obj)
   ## Private functions
 
   defp normalize_hex_string(string) do

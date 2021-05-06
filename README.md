@@ -49,7 +49,7 @@ Make a simple REST call to get the block time of the chain.
 iex(1)> Tradehub.Protocol.block_time
 ```
 
-## Websocket subscribe
+## Websocket
 
 This example will do a subscription onto the channel `market_stats`, and print out the received messages.
 
