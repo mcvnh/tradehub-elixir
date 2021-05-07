@@ -19,6 +19,7 @@ defmodule Tradehub.MixProject do
       ],
       docs: [
         main: "readme",
+        authors: ["Anh Mac <anhmv91@gmail.com>"],
         source_url: "https://github.com/anhmv/tradehub-elixir",
         extras: ["README.md"]
       ],
