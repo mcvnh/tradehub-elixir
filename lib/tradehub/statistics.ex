@@ -3,6 +3,8 @@ defmodule Tradehub.Statistics do
   This module uses to fetch profits information of the chain.
   """
 
+  import Tradehub.Raising
+
   @doc """
   Get rich list of a specific token
 
@@ -13,6 +15,7 @@ defmodule Tradehub.Statistics do
   """
 
   @spec rich_list(String.t()) :: {:ok, list(Tradehub.rich_holder())} | {:error, HTTPoison.Error.t()}
+  @spec rich_list!(String.t()) :: list(Tradehub.rich_holder())
 
   def rich_list(token) do
     case Tradehub.get("get_rich_list", params: %{token: token}) do
@@ -20,6 +23,8 @@ defmodule Tradehub.Statistics do
       other -> other
     end
   end
+
+  raising(:rich_list, token)
 
   @doc """
   Get top returns profit of the given market

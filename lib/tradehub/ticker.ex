@@ -3,6 +3,8 @@ defmodule Tradehub.Ticker do
   Enable features to work with tickers endpoints.
   """
 
+  import Tradehub.Raising
+
   @doc """
   Requests candlesticks for the given market.
 
@@ -21,6 +23,8 @@ defmodule Tradehub.Ticker do
 
   @spec candlesticks(String.t(), integer, integer, integer) ::
           {:ok, list(Tradehub.candlestick())} | {:error, HTTPoison.Error.t()}
+  @spec candlesticks!(String.t(), integer, integer, integer) ::
+          list(Tradehub.candlestick())
 
   def candlesticks(market, resolution, from, to) do
     case Tradehub.get(
@@ -37,6 +41,8 @@ defmodule Tradehub.Ticker do
     end
   end
 
+  raising(:candlesticks, market, resolution, from, to)
+
   @doc """
   Requests prices of the given market.
 
@@ -47,6 +53,7 @@ defmodule Tradehub.Ticker do
   """
 
   @spec prices(String.t()) :: {:ok, Tradehub.ticker_prices()} | {:error, HTTPoison.Error.t()}
+  @spec prices!(String.t()) :: Tradehub.ticker_prices()
 
   def prices(market) do
     case Tradehub.get(
@@ -57,6 +64,8 @@ defmodule Tradehub.Ticker do
       other -> other
     end
   end
+
+  raising(:prices, market)
 
   @doc """
   Requests latest statistics information about the given market or all markets
@@ -72,6 +81,7 @@ defmodule Tradehub.Ticker do
           {:ok, list(Tradehub.market_stats())} | {:error, HTTPoison.Error.t()}
   @spec market_stats(String.t()) ::
           {:ok, list(Tradehub.market_stats())} | {:error, HTTPoison.Error.t()}
+  @spec market_stats!(String.t()) :: list(Tradehub.market_stats())
 
   def market_stats(market \\ nil) do
     case Tradehub.get(
@@ -82,4 +92,7 @@ defmodule Tradehub.Ticker do
       other -> other
     end
   end
+
+  raising(:market_stats)
+  raising(:market_stats, market)
 end

@@ -4,6 +4,8 @@ defmodule Tradehub.Exchange do
   exchange information.
   """
 
+  import Tradehub.Raising
+
   @doc """
   Requests all known tokens on the Tradehub chain.
 
@@ -14,6 +16,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec tokens :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.token())}
+  @spec tokens! :: list(Tradehub.token())
 
   def tokens do
     case Tradehub.get("get_tokens") do
@@ -21,6 +24,8 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:tokens)
 
   @doc """
   Request information about a token
@@ -32,6 +37,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec token(String.t()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.token()}
+  @spec token!(String.t()) :: Tradehub.token()
 
   def token(denom) do
     case Tradehub.get("get_token", params: %{token: String.downcase(denom)}) do
@@ -40,34 +46,46 @@ defmodule Tradehub.Exchange do
     end
   end
 
+  raising(:token, denom)
+
   @doc """
   Requests all markets or filtered markets
-
-  ## Parameters
-
-  - **market_type** - type of the market, `future` or `spot`
-  - **is_active** - if only active markets should be returned
-  - **is_settled** - if only settled markets should be returned
 
   ## Examples
 
       iex> Tradehub.Exchange.markets
-      iex> Tradehub.Exchange.markets("spot")
 
   """
 
-  @spec markets(nil, nil, nil) :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.market())}
-  @spec markets(String.t(), boolean, boolean()) :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.market())}
+  @typedoc """
+  Query params for `/get_markets` endpoint
 
-  def markets(market_type \\ nil, is_active \\ nil, is_settled \\ nil) do
-    request =
-      Tradehub.get("get_markets", params: %{market_type: market_type, is_active: is_active, is_settled: is_settled})
+  - **market_type** - type of the market, `futures` or `spot`
+  - **is_active** - if only active markets should be returned
+  - **is_settled** - if only settled markets should be returned
+
+  """
+  @type market_options :: %{
+          market_type: :future | :spot,
+          is_active: boolean(),
+          is_settled: boolean()
+        }
+
+  @spec markets(%{}) :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.market())}
+  @spec markets(market_options()) :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.market())}
+  @spec markets!(market_options()) :: list(Tradehub.market())
+
+  def markets(market_options \\ %{}) do
+    request = Tradehub.get("get_markets", params: market_options)
 
     case request do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
   end
+
+  raising(:markets)
+  raising(:markets, market_options)
 
   @doc """
   Request information about a market
@@ -79,6 +97,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec market(String.t()) :: {:ok, Tradehub.market()} | {:error, HTTPoison.Error.t()}
+  @spec market!(String.t()) :: Tradehub.market()
 
   def market(market) do
     case Tradehub.get("get_market", params: %{market: String.downcase(market)}) do
@@ -86,6 +105,8 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:market, market)
 
   @doc """
   Get the latest orderbook of given market
@@ -102,6 +123,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec orderbook(String.t(), integer) :: {:ok, Tradehub.orderbook()} | {:error, HTTPoison.Error.t()}
+  @spec orderbook!(String.t(), integer) :: Tradehub.orderbook()
 
   def orderbook(market, limit \\ 50) do
     request = Tradehub.get("get_orderbook", params: %{market: String.downcase(market), limit: limit})
@@ -111,6 +133,9 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:orderbook, market)
+  raising(:orderbook, market, limit)
 
   @doc """
   Requests oracle informations of the Tradehub
@@ -123,7 +148,9 @@ defmodule Tradehub.Exchange do
 
   @type oracle_id :: String.t()
   @type id_to_oracle :: %{oracle_id => Tradehub.oracle()}
+
   @spec oracle_results :: {:ok, id_to_oracle} | {:error, HTTPoison.Error.t()}
+  @spec oracle_results! :: id_to_oracle
 
   def oracle_results() do
     case Tradehub.get("get_oracle_results") do
@@ -131,6 +158,8 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:oracle_results)
 
   @doc """
   Requests oracle information about a given oracle id
@@ -142,6 +171,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec oracle_result(oracle_id) :: {:ok, Tradehub.oracle()} | {:error, HTTPoison.Error.t()}
+  @spec oracle_result!(oracle_id) :: Tradehub.oracle()
 
   def oracle_result(oracle_id) do
     case Tradehub.get("get_oracle_result", params: %{id: String.upcase(oracle_id)}) do
@@ -149,6 +179,8 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:oracle_result, oracle_id)
 
   @doc """
   Get insurance fund balances of the chain.
@@ -160,6 +192,7 @@ defmodule Tradehub.Exchange do
   """
 
   @spec insurance_balances :: {:ok, list(Tradehub.amount())} | {:error, HTTPoison.Error.t()}
+  @spec insurance_balances! :: list(Tradehub.amount())
 
   def insurance_balances do
     case Tradehub.get("get_insurance_balance") do
@@ -167,4 +200,6 @@ defmodule Tradehub.Exchange do
       other -> other
     end
   end
+
+  raising(:insurance_balances)
 end

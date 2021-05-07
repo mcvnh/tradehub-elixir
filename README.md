@@ -28,7 +28,7 @@ The package can be installed by adding `tradehub` to your dependencies in `mix.e
 ``` elixir
 def deps do
   [
-    {:tradehub, "~> 0.1.5"}
+    {:tradehub, "~> 0.1.8"}
   ]
 end
 ```
