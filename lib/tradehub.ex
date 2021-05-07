@@ -14,7 +14,7 @@ defmodule Tradehub do
           username: text
         }
 
-  @type coin :: %{amount: text, denom: text}
+  @type amount :: %{amount: text, denom: text}
   @type account :: %{
           height: text,
           result:
@@ -24,7 +24,7 @@ defmodule Tradehub do
                 account_result_value :: %{
                   account_number: text,
                   address: text,
-                  coins: list(coin),
+                  coins: list(amount),
                   public_key:
                     public_key :: %{
                       type: text,
@@ -260,10 +260,10 @@ defmodule Tradehub do
                 list(
                   delegation_result_rewards :: %{
                     validator_address: text,
-                    reward: list(Tradehub.coin())
+                    reward: list(amount())
                   }
                 ),
-              total: list(coin)
+              total: list(amount())
             }
         }
 
@@ -383,8 +383,78 @@ defmodule Tradehub do
           id: text
         }
 
+  @type fee :: %{
+          amount: list(amount()),
+          gas: String.t()
+        }
+
+  @type message :: %{
+          type: text(),
+          value: map()
+        }
+
+  @type signing_message :: %{
+          accountNumber: text(),
+          chainId: text(),
+          fee: fee(),
+          memo: text(),
+          msgs: list(message()),
+          sequence: text()
+        }
+
+  @type signature :: %{
+          pub_key:
+            pub_key :: %{
+              type: text(),
+              value: text()
+            },
+          signature: text()
+        }
+
+  @type tx :: %{
+          fee: fee(),
+          msg: list(message()),
+          signature: list(signature()),
+          memo: text()
+        }
+
+  @type complete_tx :: %{
+          fee: fee(),
+          mode: String.t(),
+          tx: tx()
+        }
+
+  @type txns_fee :: %{
+          msg_type: text(),
+          fee: text()
+        }
+
+  @type txns_fees :: %{
+          height: text(),
+          result: list(txns_fee())
+        }
+
+  @type withdrawal_fee :: %{
+          prev_update_time: integer(),
+          details:
+            details :: %{
+              deposit:
+                fee :: %{
+                  fee: text()
+                },
+              withdrawal:
+                fee :: %{
+                  fee: text()
+                }
+            }
+        }
+
   @doc false
   def get(url, options \\ [], headers \\ []) do
     Tradehub.Net.get(url, headers, options)
+  end
+
+  def send(body, options \\ [], headers \\ []) do
+    Tradehub.Net.post("txs", body, headers, options)
   end
 end

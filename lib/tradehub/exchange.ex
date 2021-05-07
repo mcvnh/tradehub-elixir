@@ -159,7 +159,7 @@ defmodule Tradehub.Exchange do
 
   """
 
-  @spec insurance_balances :: {:ok, list(Tradehub.coin())} | {:error, HTTPoison.Error.t()}
+  @spec insurance_balances :: {:ok, list(Tradehub.amount())} | {:error, HTTPoison.Error.t()}
 
   def insurance_balances do
     case Tradehub.get("get_insurance_balance") do

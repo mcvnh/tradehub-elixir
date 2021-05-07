@@ -4,8 +4,8 @@ defmodule Tradehub.Mnemonic do
   @words Tradehub.Mnemonic.Words.all()
 
   @invalid_entropy "Invalid entropy"
-  # @invalid_mnemonic "Invalid mnemonic"
-  # @invalid_checksum "Invalid mnemonic checksum"
+  @invalid_mnemonic "Invalid mnemonic"
+  @invalid_checksum "Invalid mnemonic checksum"
 
   def generate(strength \\ 256)
   def generate(strength) when rem(strength, 32) !== 0, do: raise(@invalid_entropy)
@@ -50,48 +50,48 @@ defmodule Tradehub.Mnemonic do
     end
   end
 
-  # def mnemonic_to_entropy(mnemonic) do
-  #   words = mnemonic |> String.split(" ")
-  #   if rem(length(words), 3) !== 0, do: raise(@invalid_mnemonic)
+  def mnemonic_to_entropy(mnemonic) do
+    words = mnemonic |> String.split(" ")
+    if rem(length(words), 3) !== 0, do: raise(@invalid_mnemonic)
 
-  #   bits =
-  #     Enum.map(words, fn word ->
-  #       index = Enum.find_index(@words, fn element -> element == word end)
-  #       if !index, do: raise(@invalid_mnemonic)
+    bits =
+      Enum.map(words, fn word ->
+        index = Enum.find_index(@words, fn element -> element == word end)
+        if !index, do: raise(@invalid_mnemonic)
 
-  #       Integer.to_string(index, 2) |> lpad("0", 11)
-  #     end)
-  #     |> Enum.join("")
+        Integer.to_string(index, 2) |> lpad("0", 11)
+      end)
+      |> Enum.join("")
 
-  #   divider_index = trunc(Float.floor(String.length(bits) / 33) * 32)
-  #   entropy_bits = bits |> String.slice(0..(divider_index - 1))
-  #   checksum_bits = bits |> String.slice(divider_index..-1)
+    divider_index = trunc(Float.floor(String.length(bits) / 33) * 32)
+    entropy_bits = bits |> String.slice(0..(divider_index - 1))
+    checksum_bits = bits |> String.slice(divider_index..-1)
 
-  #   entropy_bytes =
-  #     Regex.scan(~r/(.{1,8})/, entropy_bits)
-  #     |> Enum.map(fn x -> List.first(x) end)
-  #     |> Enum.map(fn x -> binary_to_byte(x) end)
+    entropy_bytes =
+      Regex.scan(~r/(.{1,8})/, entropy_bits)
+      |> Enum.map(fn x -> List.first(x) end)
+      |> Enum.map(fn x -> binary_to_byte(x) end)
 
-  #   entropy_bytes_length = length(entropy_bytes)
+    entropy_bytes_length = length(entropy_bytes)
 
-  #   cond do
-  #     entropy_bytes_length < 16 ->
-  #       raise @invalid_entropy
+    cond do
+      entropy_bytes_length < 16 ->
+        raise @invalid_entropy
 
-  #     entropy_bytes_length > 32 ->
-  #       raise @invalid_entropy
+      entropy_bytes_length > 32 ->
+        raise @invalid_entropy
 
-  #     rem(entropy_bytes_length, 4) !== 0 ->
-  #       raise @invalid_entropy
+      rem(entropy_bytes_length, 4) !== 0 ->
+        raise @invalid_entropy
 
-  #     true ->
-  #       entropy = :binary.list_to_bin(entropy_bytes)
-  #       new_checksum = derive_checksum_bits(entropy)
-  #       if new_checksum !== checksum_bits, do: raise(@invalid_checksum)
+      true ->
+        entropy = :binary.list_to_bin(entropy_bytes)
+        new_checksum = derive_checksum_bits(entropy)
+        if new_checksum !== checksum_bits, do: raise(@invalid_checksum)
 
-  #       Base.encode16(entropy)
-  #   end
-  # end
+        Base.encode16(entropy)
+    end
+  end
 
   def mnemonic_to_seed(mnemonic, password \\ "") do
     Pbkdf2.Base.hash_password(mnemonic, "mnemonic" <> password,
@@ -102,14 +102,14 @@ defmodule Tradehub.Mnemonic do
     )
   end
 
-  # def validate_mnemonic(words) do
-  #   try do
-  #     mnemonic_to_entropy(words)
-  #     true
-  #   rescue
-  #     _ -> false
-  #   end
-  # end
+  def validate_mnemonic(words) do
+    try do
+      mnemonic_to_entropy(words)
+      true
+    rescue
+      _ -> false
+    end
+  end
 
   def validate_seed(mnemonic, hash, password \\ "") do
     Pbkdf2.Base.verify_pass(mnemonic, hash, "mnemonic" <> password, :sha512, "2048", :hex)

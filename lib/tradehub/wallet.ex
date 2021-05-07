@@ -27,20 +27,31 @@ defmodule Tradehub.Wallet do
   ## Examples
 
       iex> Tradehub.Wallet.private_key_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
-      <<21, 31, 133, 212, 19, 88, 245, 109, 20, 190, 196, 132, 108, 83, 112, 163, 174, 79, 52, 222, 203, 167, 29, 72, 254, 172, 117, 236, 191, 108, 140, 161>>
+      {:ok, <<21, 31, 133, 212, 19, 88, 245, 109, 20, 190, 196, 132, 108, 83, 112, 163, 174, 79, 52, 222, 203, 167, 29, 72, 254, 172, 117, 236, 191, 108, 140, 161>>}
 
+      iex> Tradehub.Wallet.private_key_from_mnemonic("clumb twenty either puppy thank liquid vital rigid tide tragic flash elevator")
+      {:error, "Invalid mnemonic"}
   """
 
-  @spec private_key_from_mnemonic(String.t()) :: bitstring()
+  @spec private_key_from_mnemonic(String.t()) :: {:ok, bitstring()} | {:error, String.t()}
 
   def private_key_from_mnemonic(mnemonic) do
-    mnemonic
-    |> Tradehub.Mnemonic.mnemonic_to_seed()
-    |> String.upcase()
-    |> Base.decode16!()
-    |> ExtendedKey.master()
-    |> ExtendedKey.derive_path("m/44'/118'/0'/0/0")
-    |> Map.get(:key)
+    case Tradehub.Mnemonic.validate_mnemonic(mnemonic) do
+      true ->
+        private_key =
+          mnemonic
+          |> Tradehub.Mnemonic.mnemonic_to_seed()
+          |> String.upcase()
+          |> Base.decode16!()
+          |> ExtendedKey.master()
+          |> ExtendedKey.derive_path("m/44'/118'/0'/0/0")
+          |> Map.get(:key)
+
+        {:ok, private_key}
+
+      false ->
+        {:error, "Invalid mnemonic"}
+    end
   end
 
   @doc """
@@ -56,9 +67,15 @@ defmodule Tradehub.Wallet do
   @spec public_key_from_mnemonic(String.t()) :: {:ok, String.t()} | {:error, String.t()}
 
   def public_key_from_mnemonic(mnemonic) do
-    private_key = private_key_from_mnemonic(mnemonic)
+    result = private_key_from_mnemonic(mnemonic)
 
-    :libsecp256k1.ec_pubkey_create(private_key, :compressed)
+    case result do
+      {:ok, private_key} ->
+        :libsecp256k1.ec_pubkey_create(private_key, :compressed)
+
+      _ ->
+        result
+    end
   end
 
   @doc """
@@ -91,12 +108,17 @@ defmodule Tradehub.Wallet do
       iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
       {:ok, "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"}
 
+      iex> Tradehub.Wallet.address_from_mnemonic("wrost coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      {:error, "Invalid mnemonic"}
+
   """
 
   @spec address_from_mnemonic(String.t(), atom()) :: {:ok, String.t()} | {:error, String.t()}
 
   def address_from_mnemonic(mnemonic, network \\ @network) do
-    case public_key_from_mnemonic(mnemonic) do
+    result = public_key_from_mnemonic(mnemonic)
+
+    case result do
       {:ok, public_key} ->
         sha = :crypto.hash(:sha256, public_key)
         rip = :crypto.hash(:ripemd160, sha)
@@ -109,6 +131,9 @@ defmodule Tradehub.Wallet do
           end
 
         {:ok, Bech32.encode_from_5bit(prefix, Bech32.convertbits(rip, 8, 5, false))}
+
+      _ ->
+        result
     end
   end
 
@@ -186,10 +211,11 @@ defmodule Tradehub.Wallet do
   @spec create_wallet(atom()) :: Tradehub.Wallet.t()
 
   def create_wallet(network \\ @network) do
-    mnemonic = Tradehub.Mnemonic.generate()
+    mnemonic = Tradehub.Mnemonic.generate(128)
 
     private_key =
       private_key_from_mnemonic(mnemonic)
+      |> elem(1)
       |> Base.encode16()
       |> String.downcase()
 
@@ -220,10 +246,11 @@ defmodule Tradehub.Wallet do
       {:ok, public_key} ->
         {:ok, address} = address_from_private_key(private_key, network)
 
-        wallet = %Tradehub.Wallet{
+        wallet = %__MODULE__{
           private_key: private_key,
           public_key: public_key,
-          address: address
+          address: address,
+          network: network
         }
 
         {:ok, wallet}
@@ -235,16 +262,26 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      iex> wallet.address
+      "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
+
+      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
+      iex> wallet.address
+      "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"
 
   """
 
   @spec from_mnemonic(String.t(), atom()) :: {:ok, Tradehub.Wallet.t()} | {:error, String.t()}
 
   def from_mnemonic(mnemonic, network \\ @network) do
-    private_key = private_key_from_mnemonic(mnemonic)
+    case private_key_from_mnemonic(mnemonic) do
+      {:ok, private_key} ->
+        from_private_key(private_key, network)
 
-    from_private_key(private_key, network)
+      other ->
+        other
+    end
   end
 
   @doc """
@@ -310,6 +347,7 @@ defmodule Tradehub.Wallet do
   end
 
   def encode_object_in_alphanumeric_key_order(obj), do: Jason.encode!(obj)
+
   ## Private functions
 
   defp normalize_hex_string(string) do
