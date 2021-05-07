@@ -45,7 +45,7 @@ defmodule Tradehub.Tx do
       ...>     Side: "sell",
       ...>     Quantity: "200",
       ...>     Price: "1.01",
-      ...>     Originator: "swth1z2jz4uhz8zgt4lq9mq5slz3ukyp3grhl7nsr4x"
+      ...>     Originator: "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
       ...>   }
       ...> }
       iex> Tradehub.Tx.build(message, wallet)

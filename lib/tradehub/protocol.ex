@@ -73,7 +73,7 @@ defmodule Tradehub.Protocol do
 
   ## Examples
 
-      iex> Tradehub.Protocol.delegation_rewards("swth1945upvdn2p2sgq7muyhfmygn3fu740jw9l73du")
+      iex> Tradehub.Protocol.delegation_rewards("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 
@@ -253,7 +253,7 @@ defmodule Tradehub.Protocol do
 
   ## Examples
 
-      iex> Tradehub.Protocol.external_transfers("swth1qlue2pat9cxx2s5xqrv0ashs475n9va963h4hz")
+      iex> Tradehub.Protocol.external_transfers("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 

@@ -17,7 +17,7 @@ blockchain, and the [DEMEX](https://app.dem.exchange/) decentralized exchange vi
 
 Switcheo Tradehub is a blockchain protocol built on top of [Tendermint](https://tendermint.com) which allows for fair, efficient, and transparent trading on platforms such as Demex. The protocol
 designed to allow anyone to create a market for any underlying. Head over to its
-[landing page](https://www.switcheo.com/), and its official [API documetation](https://docs.switcheo.org) more details.
+[landing page](https://www.switcheo.com/), and its official [API documetation](https://docs.switcheo.org) for more details.
 
 Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free TestNet tokens.
 
@@ -39,7 +39,7 @@ Configure Tradehub network in your `config.exs` [OPTIONAL].
 
 ``` elixir
 config :tradehub,
-  network: :testnet # default for dev, test
+  network: :testnet # :mainnet
   rest: "https://tradescan.switcheo.org/", # default
   ws: "wss://ws.dem.exchange/ws" # default
 ```
