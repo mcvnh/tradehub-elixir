@@ -8,7 +8,7 @@
 ---
 
 Welcome to the Tradehub SDK for Elixir language. The goal of building this project is to empower
-developers by offering an client that is easily to interact with all aspects of the Switheo Tradehub
+developers by offering an API client that is easy to interact with all aspects of the Switheo Tradehub
 blockchain, and the [DEMEX](https://app.dem.exchange/) decentralized exchange via its REST/Websocket endpoints.
 
 > The code found in this repository is unaudited and incomplete. Switcheo is not responsible for any losses incurred when using this code.
@@ -19,7 +19,7 @@ Switcheo Tradehub is a blockchain protocol built on top of [Tendermint](https://
 designed to allow anyone to create a market for any underlying. Head over to its
 [landing page](https://www.switcheo.com/), and its official [API documetation](https://docs.switcheo.org) for more details.
 
-Head over to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free TestNet tokens.
+Go to [Tradehub Faucet](https://t.me/the_tradehub_bot) get receive free TestNet tokens.
 
 ## Installation
 
