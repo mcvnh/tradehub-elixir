@@ -1,23 +1,75 @@
-# clumb twenty either puppy thank liquid vital rigid tide tragic flash elevator
-# VAib7NRsfnc1aJPvA2JpRKqr4s7kUfwYzrjuQZa1z6ok2MaN9tjgNvjN3Xz3FGmE7RRsapL3sx7CH5bP5xwc3KKVuxj4R5B1L85oRym2DdmjPSDewD2ZyDjUsWum2SVGmwsWnh3s5xFTGZ2dxMq51CLnvG46BZk5GHjXeNBGdrFDPAeFKC9jQVcd7kh43EBWNVs6trTw7r3KZAkXHSEzase2NN7K2W4pbEqacn4Vyu1BGnRAoo6H6mwBCrXgcSNH4c4qWFrTcqERPT6MULB1anMbzQkaJ7kkC8JDmYq5xRMXmZWRTL67EXGR3x39xqvWvgpgFS8MwqKuiudzmMbCFwEANMu9ZHomaBc6UsXWNi1SeRJ
-# 123456!aA
-# 2xbEeBv7aAGZoRJgSroghd4rFUJqnz3d1qspPLTEcFwT3pquaUB6uy2fSy7MPuZgPFrqV1KcCzqbdy9nCddCN9yMpkmwHYLfiNWMLaYSWB1W8MdmCGDNLYif31TJDhQxQ6d8ArkBhf6NCwW6v5Yezh99b7MuJPZNjaBVJ9vWA7F2hbHBvH93G3yZxAQpzQ1xieimYvwUKfv7e2BQXJjqYE4zPkUNKrLp8jVB9k299bpoFR6F134ZCXyGwsm4wJGAN5wpBVJadZDetfM27vQbBzumsVyHZTDVbqqB5U8qVW1ewM1JoUBCwhyr8uDQ4hkdQtVgo6djT7W3hA1o5BvMGqVa2nd1Ngh4ik
-# second enter wire knee dial save code during ankle grape estate run
 defmodule Tradehub.Tx do
+  @moduledoc """
+  This module aims to construct, generate, and broadcast messages accross the Tradehub blockchain.
+  """
+
+  @typedoc "The fee you might have to spend to broadcast the message"
+  @type fee :: %{
+          amount: list(Tradehub.amount()),
+          gas: String.t()
+        }
+
+  @typedoc """
+  The payload that actually broadcast across over the blockchain.
+  It is then used to form the signing message.
+  """
+  @type message :: %{
+          type: String.t(),
+          value: map()
+        }
+
+  @type signing_message :: %{
+          accountNumber: String.t(),
+          chainId: String.t(),
+          fee: fee(),
+          memo: String.t(),
+          msgs: list(message()),
+          sequence: String.t()
+        }
+
+  @type signature :: %{
+          pub_key:
+            pub_key :: %{
+              type: String.t(),
+              value: String.t()
+            },
+          signature: String.t()
+        }
+
+  @type tx :: %{
+          fee: fee(),
+          msg: list(message()),
+          signature: list(signature()),
+          memo: String.t()
+        }
+
+  @type complete_tx :: %{
+          fee: fee(),
+          mode: String.t(),
+          tx: tx()
+        }
+
   def test do
-    {:ok, wallet} =
-      Tradehub.Wallet.from_mnemonic("clumb twenty either puppy thank liquid vital rigid tide tragic flash elevator")
+    {:ok, wallet} = Tradehub.Wallet.from_mnemonic("second enter wire knee dial save code during ankle grape estate run")
 
-    message = %{
-      type: "profile/UpdateProfile",
-      value: %{
-        User: "my_name_is_cool",
-        Twitter: "swth_eth1",
-        Originator: wallet.address
-      }
-    }
+    new_order_payload =
+      Tradehub.Tx.CreateOrder.build(%{
+        market: "swth_eth1",
+        side: "buy",
+        quantity: "100",
+        price: "1.01000000000",
+        originator: wallet.address
+      })
 
-    tx = build(message, wallet) |> Jason.encode!()
+    messages = [new_order_payload]
+
+    tx =
+      {messages, wallet}
+      |> generate_signing_messages
+      |> sign
+      |> construct_tx("")
+      |> build_tx
+      |> Jason.encode!()
 
     Tradehub.send(tx)
   end
@@ -52,23 +104,7 @@ defmodule Tradehub.Tx do
 
   """
 
-  # @spec build([Tradehub.message()] | Tradehub.message(), Tradehub.Wallet.t(), String.t(), atom()) ::
-  #         Tradehub.complete_tx()
-
-  def build(messages, wallet, tx_memo \\ "", mode \\ :block)
-
-  def build(messages, wallet, tx_memo, mode) when not is_list(messages), do: build([messages], wallet, tx_memo, mode)
-
-  def build(messages, wallet, tx_memo, mode) when is_list(messages) do
-    {messages, wallet, tx_memo, mode}
-    |> sign_messages
-    |> construct_tx
-    |> build_tx
-  end
-
-  ## Private functions
-
-  defp sign_messages({messages, wallet, tx_memo, mode}) do
+  def generate_signing_messages({messages, wallet}) do
     {:ok, account} = Tradehub.Account.account(wallet.address)
 
     accountNumber = account.result.value.account_number
@@ -96,6 +132,12 @@ defmodule Tradehub.Tx do
       sequence: sequence
     }
 
+    {messages, signing_message, wallet}
+  end
+
+  ## Private functions
+
+  def sign({messages, signing_message, wallet}) do
     {:ok, sign} = Tradehub.Wallet.sign(signing_message, wallet)
 
     signature = %{
@@ -106,11 +148,11 @@ defmodule Tradehub.Tx do
       signature: sign
     }
 
-    {messages, mode, tx_memo, signature}
+    {messages, signature}
   end
 
-  defp construct_tx({messages, mode, tx_memo, signature}) do
-    tx = %{
+  def construct_tx({messages, signature}, _memo \\ nil) do
+    %{
       fee: %{
         amount: [
           %{
@@ -121,14 +163,12 @@ defmodule Tradehub.Tx do
         gas: "100000000000"
       },
       msg: messages,
-      signatures: [signature],
-      memo: tx_memo
+      signatures: [signature]
+      # memo: memo
     }
-
-    {tx, mode}
   end
 
-  defp build_tx({tx, mode}) do
+  def build_tx(tx, mode \\ :block) do
     %{
       mode: Atom.to_string(mode),
       tx: tx,
