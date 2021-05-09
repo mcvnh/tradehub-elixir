@@ -383,47 +383,6 @@ defmodule Tradehub do
           id: text
         }
 
-  @type fee :: %{
-          amount: list(amount()),
-          gas: String.t()
-        }
-
-  @type message :: %{
-          type: text(),
-          value: map()
-        }
-
-  @type signing_message :: %{
-          accountNumber: text(),
-          chainId: text(),
-          fee: fee(),
-          memo: text(),
-          msgs: list(message()),
-          sequence: text()
-        }
-
-  @type signature :: %{
-          pub_key:
-            pub_key :: %{
-              type: text(),
-              value: text()
-            },
-          signature: text()
-        }
-
-  @type tx :: %{
-          fee: fee(),
-          msg: list(message()),
-          signature: list(signature()),
-          memo: text()
-        }
-
-  @type complete_tx :: %{
-          fee: fee(),
-          mode: String.t(),
-          tx: tx()
-        }
-
   @type txns_fee :: %{
           msg_type: text(),
           fee: text()

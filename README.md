@@ -94,4 +94,5 @@ Full documentation can be found at [https://hexdocs.pm/tradehub](https://hexdocs
 * [ ] Implementation of all general information endpoints
   * [x] Public endpoints
   * [x] Websocket
-  * [ ] Handling of authentication and private endpoints
+  * [x] Handling of authentication
+  * [ ] Private endpoints <- doing
