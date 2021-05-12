@@ -1,4 +1,4 @@
-defmodule Tradehub.Tx.CreateOrder do
+defmodule Tradehub.Tx.MsgCreateOrder do
   @moduledoc """
   The payload message of the `order/CreateOrder` private endpoint.
   """
@@ -22,12 +22,12 @@ defmodule Tradehub.Tx.CreateOrder do
           side: side(),
           quantity: String.t(),
           price: String.t(),
-          order_type: order_type(),
-          order_time_in_force: time_in_force(),
+          type: order_type(),
+          time_in_force: time_in_force(),
           stop_price: String.t(),
           trigger_type: String.t(),
-          is_post_only: String.t(),
-          is_reduce_only: String.t(),
+          is_post_only: boolean(),
+          is_reduce_only: boolean(),
           originator: Tradehub.Wallet.address()
         }
 
@@ -35,12 +35,12 @@ defmodule Tradehub.Tx.CreateOrder do
             side: nil,
             quantity: "1",
             price: nil,
-            order_type: :limit,
-            order_time_in_force: :gtc,
+            type: :limit,
+            time_in_force: :gtc,
             stop_price: nil,
             trigger_type: nil,
-            is_post_only: "false",
-            is_reduce_only: "false",
+            is_post_only: false,
+            is_reduce_only: false,
             originator: nil
 
   def type, do: "order/MsgCreateOrder"
@@ -48,7 +48,6 @@ defmodule Tradehub.Tx.CreateOrder do
   @doc """
   Validate the payload.
   """
-
   @spec validate(t()) :: {:ok, t()}
   def validate(message) do
     {:ok, message}

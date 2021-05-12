@@ -16,11 +16,11 @@ defmodule Tradehub.Tx do
       iex> import Tradehub.Tx
       iex> wallet = Tradehub.Wallet.from_mnemonic!("second enter wire knee dial save code during ankle grape estate run")
       iex> message =
-      ...> Tradehub.Tx.CreateOrder.build(%{
+      ...> Tradehub.Tx.MsgCreateOrder.build(%{
       ...>   market: "swth_eth1",
       ...>   side: "buy",
       ...>   quantity: "100",
-      ...>   price: "1.01000000000",
+      ...>   price: "0.0001",
       ...>   originator: wallet.address
       ...> })
       iex> msg =
@@ -50,8 +50,8 @@ defmodule Tradehub.Tx do
 
   @typedoc "Signing message"
   @type signing_message :: %{
-          accountNumber: String.t(),
-          chainId: String.t(),
+          account_number: String.t(),
+          chain_id: String.t(),
           fee: fee(),
           memo: String.t(),
           msgs: list(message()),
@@ -101,16 +101,15 @@ defmodule Tradehub.Tx do
             tx: nil
 
   def test do
-    wallet = Tradehub.Wallet.from_mnemonic!("second enter wire knee dial save code during ankle grape estate run")
+    wallet = Tradehub.Wallet.from_mnemonic!(Application.fetch_env!(:tradehub, :wallet))
 
     message =
-      Tradehub.Tx.CreateOrder.build(%{
-        market: "swth_eth1",
-        side: "buy",
-        quantity: "100",
-        price: "1.01000000000",
+      %{
+        username: "tradehub",
+        twitter: "mvanh91",
         originator: wallet.address
-      })
+      }
+      |> Tradehub.Tx.MsgUpdateProfile.build
 
     msg =
       {wallet, [message]}
@@ -134,18 +133,20 @@ defmodule Tradehub.Tx do
   def generate_signing_message({wallet, messages}) do
     {:ok, account} = Tradehub.Account.account(wallet.address)
 
-    accountNumber = account.result.value.account_number
+    account_number = account.result.value.account_number
     sequence = account.result.value.sequence
 
-    chainId =
+    IO.inspect(account)
+
+    chain_id =
       case wallet.network do
-        :mainnet -> "switcheochain"
-        :testnet -> "switcheo-tradehub-1"
+        :testnet -> "switcheochain"
+        :mainnet -> "switcheo-tradehub-1"
       end
 
     signing_message = %{
-      accountNumber: accountNumber,
-      chainId: chainId,
+      account_number: account_number,
+      chain_id: chain_id,
       fee: %{
         amount: [
           %{
@@ -172,11 +173,11 @@ defmodule Tradehub.Tx do
     case Tradehub.Wallet.sign(signing_message, wallet) do
       {:ok, sign} ->
         signature = %{
+          signature: sign,
           pub_key: %{
             type: "tendermint/PubKeySecp256k1",
             value: wallet.public_key |> Base.encode64()
-          },
-          signature: sign
+          }
         }
 
         {messages, signature}
@@ -213,21 +214,12 @@ defmodule Tradehub.Tx do
   Wrap the transaction with the network fee
   """
 
-  @spec build_tx(any, atom) :: %{fee: %{amount: [map, ...], gas: <<_::96>>}, mode: binary, tx: any}
+  @spec build_tx(any, atom) :: %{mode: binary, tx: any}
 
   def build_tx(tx, mode \\ :block) do
     %{
       mode: Atom.to_string(mode),
       tx: tx,
-      fee: %{
-        amount: [
-          %{
-            denom: "swth",
-            amount: "100000000"
-          }
-        ],
-        gas: "100000000000"
-      }
     }
   end
 end

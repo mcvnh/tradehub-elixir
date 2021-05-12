@@ -3,7 +3,8 @@ import Config
 config :tradehub,
   network: :mainnet,
   rest: "https://tradescan.switcheo.org/",
-  ws: "wss://ws.dem.exchange/ws"
+  ws: "wss://ws.dem.exchange/ws",
+  wallet: "second enter wire knee dial save code during ankle grape estate run"
 
 config :logger,
   compile_time_purge_matching: [
