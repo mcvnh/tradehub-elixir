@@ -80,7 +80,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Account.address("tradehub")
+      iex> Tradehub.Account.address("tradehub_new_ver_found")
       {:ok, "\n"}
 
   """
@@ -102,7 +102,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Account.username?("tradehub")
+      iex> Tradehub.Account.username?("tradehub_new_ver_found")
       false
 
   """

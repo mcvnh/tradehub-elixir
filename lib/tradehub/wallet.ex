@@ -352,24 +352,28 @@ defmodule Tradehub.Wallet do
   """
 
   @spec sign(signing_message(), t()) :: {:ok, String.t()} | {:error, String.t()}
-  @spec sign!(signing_message(), t()) :: String.t()
 
   def sign(message, wallet) do
     message_with_correct_keys_order = encode_object_in_alphanumeric_key_order(message)
 
-    {:ok, private_key} = normalize_hex_string(wallet.private_key)
-    {:ok, public_key} = normalize_hex_string(wallet.public_key)
+    hash = :crypto.hash(:sha256, message_with_correct_keys_order)
 
-    signature = :crypto.sign(:ecdsa, :sha256, message_with_correct_keys_order, [private_key, :secp256k1])
-    verify = :crypto.verify(:ecdsa, :sha256, message_with_correct_keys_order, signature, [public_key, :secp256k1])
+    result =
+      :libsecp256k1.ecdsa_sign_compact(
+        hash,
+        wallet.private_key,
+        :nonce_function_rfc6979,
+        <<>>
+      )
 
-    case verify do
-      true -> {:ok, signature |> Base.encode64()}
-      false -> {:error, "Cannot verify the message"}
+    case result do
+      {:ok, sig, _} ->
+        {:ok, sig |> Base.encode64()}
+
+      other ->
+        other
     end
   end
-
-  raising(:sign, signing_message, wallet)
 
   @doc ~S"""
   Encode a map to JSON with all of the keys in alphabetical order (nested included).
@@ -386,6 +390,8 @@ defmodule Tradehub.Wallet do
       "\"\""
 
   """
+
+  @spec encode_object_in_alphanumeric_key_order(any) :: binary
 
   def encode_object_in_alphanumeric_key_order(obj) when is_map(obj) do
     az_keys = obj |> Map.keys() |> Enum.sort()

@@ -109,7 +109,7 @@ defmodule Tradehub.Tx do
         twitter: "mvanh91",
         originator: wallet.address
       }
-      |> Tradehub.Tx.MsgUpdateProfile.build
+      |> Tradehub.Tx.MsgUpdateProfile.build()
 
     msg =
       {wallet, [message]}
@@ -136,8 +136,6 @@ defmodule Tradehub.Tx do
     account_number = account.result.value.account_number
     sequence = account.result.value.sequence
 
-    IO.inspect(account)
-
     chain_id =
       case wallet.network do
         :testnet -> "switcheochain"
@@ -150,12 +148,13 @@ defmodule Tradehub.Tx do
       fee: %{
         amount: [
           %{
-            denom: "swth",
-            amount: "100000000"
+            amount: Integer.to_string(1 * length(messages)) <> "00000000",
+            denom: "swth"
           }
         ],
         gas: "100000000000"
       },
+      memo: "",
       msgs: messages,
       sequence: sequence
     }
@@ -173,17 +172,14 @@ defmodule Tradehub.Tx do
     case Tradehub.Wallet.sign(signing_message, wallet) do
       {:ok, sign} ->
         signature = %{
-          signature: sign,
           pub_key: %{
             type: "tendermint/PubKeySecp256k1",
             value: wallet.public_key |> Base.encode64()
-          }
+          },
+          signature: sign
         }
 
         {messages, signature}
-
-      _ ->
-        {messages, %{}}
     end
   end
 
@@ -219,7 +215,7 @@ defmodule Tradehub.Tx do
   def build_tx(tx, mode \\ :block) do
     %{
       mode: Atom.to_string(mode),
-      tx: tx,
+      tx: tx
     }
   end
 end
