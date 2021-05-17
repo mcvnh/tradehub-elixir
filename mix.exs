@@ -21,7 +21,24 @@ defmodule Tradehub.MixProject do
         main: "readme",
         authors: ["Anh Mac <anhmv91@gmail.com>"],
         source_url: "https://github.com/anhmv/tradehub-elixir",
-        extras: ["README.md"]
+        extras: ["README.md"],
+        groups_for_modules: [
+          Account: [Tradehub.Wallet, Tradehub.Account],
+          Public: [
+            Tradehub.Exchange,
+            Tradehub.Fee,
+            Tradehub.Trade,
+            Tradehub.Ticker,
+            Tradehub.Statistics,
+            Tradehub.Protocol
+          ],
+          Authenticated: [
+            Tradehub.Tx,
+            Tradehub.Tx.MsgUpdateProfile,
+            Tradehub.Tx.MsgCreateOrder
+          ],
+          WebSocket: [Tradehub.Stream]
+        ]
       ],
       package: [
         name: "tradehub",

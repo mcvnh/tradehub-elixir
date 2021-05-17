@@ -11,7 +11,7 @@ Welcome to the Tradehub SDK for Elixir language. The goal of building this proje
 developers by offering an API client that is easy to interact with all aspects of the Switheo Tradehub
 blockchain, and the [DEMEX](https://app.dem.exchange/) decentralized exchange via its REST/Websocket endpoints.
 
-> The code found in this repository is unaudited and incomplete. Switcheo is not responsible for any losses incurred when using this code.
+> The code found in this repository is unaudited and incomplete. I do not responsible for any losses incurred when using this code.
 
 ## General
 
@@ -28,7 +28,7 @@ The package can be installed by adding `tradehub` to your dependencies in `mix.e
 ``` elixir
 def deps do
   [
-    {:tradehub, "~> 0.1.8"}
+    {:tradehub, "~> 0.1.10"}
   ]
 end
 ```
