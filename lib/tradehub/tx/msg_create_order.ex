@@ -20,7 +20,7 @@ defmodule Tradehub.Tx.MsgCreateOrder do
   @type t :: %__MODULE__{
           market: String.t(),
           side: side(),
-          quantity: String.t(),
+          quantity: integer(),
           price: String.t(),
           type: order_type(),
           time_in_force: time_in_force(),

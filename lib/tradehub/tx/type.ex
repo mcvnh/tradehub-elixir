@@ -1,4 +1,6 @@
 defmodule Tradehub.Tx.Type do
+  @moduledoc false
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Tradehub.Tx.Validator

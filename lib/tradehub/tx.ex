@@ -1,36 +1,33 @@
 defmodule Tradehub.Tx do
   @moduledoc """
-  This module aims to construct, generate, and broadcast messages accross the Tradehub blockchain.
+  Use this module to broadcast your messages into the Tradehub blockchain.
 
-  To pack messages for broadcasting across the the chain, it consists steps as below:
+  The steps of broadcasting messages describes as below:
 
-  1. Given raw messages that constist of the message `type` and an `object` containing the message params.
+  1. Compose your messages
   2. Construct signing messages
-  3. Construct the digest by marshalling the `signing message` into a JSON format, and applying the hash algorithm SHA256
-  4. Sign the digest with the private key
-  5. Combine the messages with its signatur, set fee, and memo if any.
-  6. Complete Tx, mode: `block` to wait for the txn to be accepted into the block.
+  3. Sign the signing messages with your private key
+  4. Construct tx
+  5. Construct completeTx
 
   ## Examples
 
       iex> import Tradehub.Tx
-      iex> wallet = Tradehub.Wallet.from_mnemonic!("second enter wire knee dial save code during ankle grape estate run")
+      iex> wallet = Tradehub.Wallet.from_mnemonic! Application.fetch_env!(:tradehub, :wallet)
       iex> message =
-      ...> Tradehub.Tx.MsgCreateOrder.build(%{
-      ...>   market: "swth_eth1",
-      ...>   side: "buy",
-      ...>   quantity: "100",
-      ...>   price: "0.0001",
-      ...>   originator: wallet.address
-      ...> })
-      iex> msg =
-      ...>   {wallet, [message]}
+      ...>   %{
+      ...>     username: "trade",
+      ...>     twitter: "mvanh91",
+      ...>     originator: wallet.address
+      ...>   }
+      ...>   |> Tradehub.Tx.MsgUpdateProfile.build()
+      iex> {wallet, [message]}
       ...>   |> generate_signing_message()
       ...>   |> sign()
       ...>   |> construct_tx()
       ...>   |> build_tx()
       ...>   |> Jason.encode!()
-      iex> Tradehub.send(msg)
+      ...>   |> Tradehub.send
   """
 
   @typedoc "The fee you might have to spend to broadcast the message"
@@ -83,29 +80,12 @@ defmodule Tradehub.Tx do
           tx: tx()
         }
 
-  @type t :: %__MODULE__{
-          wallet: Tradehub.Wallet.t(),
-          payload: [message()],
-          memo: String.t(),
-          mode: atom(),
-          signature: map(),
-          signing_message: map(),
-          tx: tx()
-        }
-  defstruct wallet: nil,
-            payload: [],
-            memo: nil,
-            mode: :block,
-            signature: nil,
-            signing_message: nil,
-            tx: nil
-
   def test do
     wallet = Tradehub.Wallet.from_mnemonic!(Application.fetch_env!(:tradehub, :wallet))
 
     message =
       %{
-        username: "tradehub",
+        username: "trade",
         twitter: "mvanh91",
         originator: wallet.address
       }
@@ -120,6 +100,18 @@ defmodule Tradehub.Tx do
       |> Jason.encode!()
 
     Tradehub.send(msg)
+  end
+
+  @spec broadcast(list(message()), Tradehub.Wallet.t(), String.t()) :: any()
+
+  def broadcast(messages, wallet, memo \\ "") do
+    {wallet, messages}
+    |> generate_signing_message()
+    |> sign()
+    |> construct_tx(memo)
+    |> build_tx()
+    |> Jason.encode!()
+    |> Tradehub.send()
   end
 
   @doc """
@@ -162,11 +154,11 @@ defmodule Tradehub.Tx do
     {wallet, messages, signing_message}
   end
 
-  @spec sign({Tradehub.Wallet.t(), any, map}) ::
-          {any, %{optional(:pub_key) => %{type: <<_::208>>, value: binary}, optional(:signature) => binary}}
   @doc """
   Sign the signing message with the wallet private key.
   """
+
+  @spec sign({Tradehub.Wallet.t(), list(message()), signing_message()}) :: {list(message()), signature()}
 
   def sign({wallet, messages, signing_message}) do
     case Tradehub.Wallet.sign(signing_message, wallet) do
