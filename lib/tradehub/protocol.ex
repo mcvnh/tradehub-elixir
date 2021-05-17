@@ -12,6 +12,8 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.status
 
+      iex> Tradehub.Protocol.status!
+
   """
 
   @spec status :: {:ok, Tradehub.protocol_status()} | {:error, HTTPoison.Error.t()}
@@ -32,6 +34,8 @@ defmodule Tradehub.Protocol do
   ## Examples
 
       iex> Tradehub.Protocol.block_time
+
+      iex> Tradehub.Protocol.block_time!
 
   """
 
@@ -54,6 +58,8 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.validators
 
+      iex> Tradehub.Protocol.validators!
+
   """
 
   @spec validators :: {:ok, list(Tradehub.validator())} | {:error, HTTPoison.Error.t()}
@@ -74,6 +80,8 @@ defmodule Tradehub.Protocol do
   ## Examples
 
       iex> Tradehub.Protocol.delegation_rewards("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
+      iex> Tradehub.Protocol.delegation_rewards!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 
@@ -98,6 +106,8 @@ defmodule Tradehub.Protocol do
   ## Examples
 
       iex> Tradehub.Protocol.blocks
+
+      iex> Tradehub.Protocol.blocks!
 
   """
 
@@ -138,6 +148,8 @@ defmodule Tradehub.Protocol do
   ## Examples
 
       iex> Tradehub.Protocol.transactions
+
+      iex> Tradehub.Protocol.transactions!
 
   """
 
@@ -189,6 +201,8 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.transaction("A93BEAC075562D4B6031262BDDE8B9A720346A54D8570A881E3671FEB6E6EFD4")
 
+      iex> Tradehub.Protocol.transaction!("A93BEAC075562D4B6031262BDDE8B9A720346A54D8570A881E3671FEB6E6EFD4")
+
   """
 
   @spec transaction(String.t()) :: {:ok, Tradehub.transaction()} | {:error, HTTPoison.Error.t()}
@@ -213,6 +227,8 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.transaction_types
 
+      iex> Tradehub.Protocol.transaction_types!
+
   """
 
   @spec transaction_types :: {:ok, list(String.t())} | {:error, HTTPoison.Error.t()}
@@ -234,6 +250,8 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.total_balances
 
+      iex> Tradehub.Protocol.total_balances!
+
   """
 
   @spec total_balances :: {:ok, list(Tradehub.protocol_balance())} | {:error, HTTPoison.Error.t()}
@@ -254,6 +272,8 @@ defmodule Tradehub.Protocol do
   ## Examples
 
       iex> Tradehub.Protocol.external_transfers("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
+      iex> Tradehub.Protocol.external_transfers!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 

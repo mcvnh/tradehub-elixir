@@ -111,6 +111,9 @@ defmodule Tradehub.Wallet do
       iex> Tradehub.Wallet.public_key_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
       {:ok, <<2, 230, 25, 59, 87, 182, 114, 223, 41, 153, 127, 228, 149, 215, 139, 79, 211, 234, 174, 157, 170, 224, 165, 226, 128, 49, 41, 226, 194, 27, 80, 78, 35>>}
 
+      iex> Tradehub.Wallet.public_key_from_private_key!("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
+      <<2, 230, 25, 59, 87, 182, 114, 223, 41, 153, 127, 228, 149, 215, 139, 79, 211, 234, 174, 157, 170, 224, 165, 226, 128, 49, 41, 226, 194, 27, 80, 78, 35>>
+
   """
 
   @spec public_key_from_private_key(private_key()) ::

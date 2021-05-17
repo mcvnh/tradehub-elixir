@@ -12,6 +12,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.get_orders("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
+      iex> Tradehub.Trade.get_orders!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
   """
 
   @spec get_orders(String.t()) :: {:ok, list(Tradehub.order())} | {:error, HTTPoison.Error.t()}
@@ -33,6 +35,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.get_order("A186AC5F560BBD4B2C1F9B21C6EF1814F3295EBD863FA3655F74942CDB198530")
 
+      iex> Tradehub.Trade.get_order!("A186AC5F560BBD4B2C1F9B21C6EF1814F3295EBD863FA3655F74942CDB198530")
+
   """
 
   @spec get_order(String.t()) :: {:ok, Tradehub.order()} | {:error, HTTPoison.Error.t()}
@@ -53,6 +57,8 @@ defmodule Tradehub.Trade do
   ## Examples
 
       iex> Tradehub.Trade.positions("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
+      iex> Tradehub.Trade.positions!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 
@@ -77,6 +83,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.positions_sorted_size("swth_eth1")
 
+      iex> Tradehub.Trade.positions_sorted_size!("swth_eth1")
+
   """
 
   @doc deprecated: "The API is not well documentation"
@@ -99,6 +107,8 @@ defmodule Tradehub.Trade do
   ## Examples
 
       iex> Tradehub.Trade.positions_sorted_risk("swth_eth1", "unknown")
+
+      iex> Tradehub.Trade.positions_sorted_risk!("swth_eth1", "unknown")
 
   """
 
@@ -123,6 +133,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.positions_sorted_pnl("swth_eth1")
 
+      iex> Tradehub.Trade.positions_sorted_pnl!("swth_eth1")
+
   """
 
   @doc deprecated: "The API is not well documentation"
@@ -146,6 +158,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.position("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "swth_eth1")
 
+      iex> Tradehub.Trade.position!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "swth_eth1")
+
   """
 
   @spec position(String.t(), String.t()) :: {:ok, Tradehub.position()} | {:error, HTTPoison.Error.t()}
@@ -167,6 +181,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.leverage("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "eth_h21")
 
+      iex> Tradehub.Trade.leverage!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "eth_h21")
+
   """
 
   @spec leverage(String.t(), String.t()) :: {:ok, Tradehub.leverage()} | {:error, HTTPoison.Error.t()}
@@ -187,6 +203,8 @@ defmodule Tradehub.Trade do
   ## Examples
 
       iex> Tradehub.Trade.trades
+
+      iex> Tradehub.Trade.trades!
 
   """
 
@@ -229,6 +247,8 @@ defmodule Tradehub.Trade do
 
       iex> Tradehub.Trade.trades_by_account("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
+      iex> Tradehub.Trade.trades_by_account!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
   """
 
   @typedoc """
@@ -270,6 +290,8 @@ defmodule Tradehub.Trade do
   ## Examples
 
       iex> Tradehub.Trade.liquidations
+
+      iex> Tradehub.Trade.liquidations!
 
   """
 

@@ -30,6 +30,8 @@ defmodule Tradehub.Account do
           }
         }}
 
+      iex> Tradehub.Account.account!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
   """
 
   @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account()}
@@ -59,6 +61,8 @@ defmodule Tradehub.Account do
           username: ""
         }}
 
+      iex> Tradehub.Account.profile!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+
   """
 
   @spec profile(Tradehub.address()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.profile()}
@@ -82,6 +86,9 @@ defmodule Tradehub.Account do
 
       iex> Tradehub.Account.address("tradehub_new_ver_found")
       {:ok, "\n"}
+
+      iex> Tradehub.Account.address!("tradehub_new_ver_found")
+      "\n"
 
   """
 

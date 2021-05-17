@@ -28,6 +28,20 @@ defmodule Tradehub.Tx do
       ...>   |> build_tx()
       ...>   |> Jason.encode!()
       ...>   |> Tradehub.send
+
+    Or
+
+      iex> import Tradehub.Tx
+      iex> wallet = Tradehub.Wallet.from_mnemonic! Application.fetch_env!(:tradehub, :wallet)
+      iex> message =
+      ...>   %{
+      ...>     username: "trade",
+      ...>     twitter: "mvanh91",
+      ...>     originator: wallet.address
+      ...>   }
+      ...>   |> Tradehub.Tx.MsgUpdateProfile.build()
+      iex> broadcast([message], wallet)
+
   """
 
   @typedoc "The fee you might have to spend to broadcast the message"
@@ -79,28 +93,6 @@ defmodule Tradehub.Tx do
           mode: String.t(),
           tx: tx()
         }
-
-  def test do
-    wallet = Tradehub.Wallet.from_mnemonic!(Application.fetch_env!(:tradehub, :wallet))
-
-    message =
-      %{
-        username: "trade",
-        twitter: "mvanh91",
-        originator: wallet.address
-      }
-      |> Tradehub.Tx.MsgUpdateProfile.build()
-
-    msg =
-      {wallet, [message]}
-      |> generate_signing_message()
-      |> sign()
-      |> construct_tx()
-      |> build_tx()
-      |> Jason.encode!()
-
-    Tradehub.send(msg)
-  end
 
   @spec broadcast(list(message()), Tradehub.Wallet.t(), String.t()) :: any()
 

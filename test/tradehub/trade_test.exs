@@ -1,4 +1,4 @@
 defmodule TradehubTest.TradeTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Trade
 end
