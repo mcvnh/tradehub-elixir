@@ -6,7 +6,7 @@ defmodule Tradehub.MixProject do
       name: "Tradehub",
       app: :tradehub,
       description: "Tradehub SDK for Elixir",
-      version: "0.1.10",
+      version: "0.1.11",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -34,8 +34,15 @@ defmodule Tradehub.MixProject do
           ],
           Authenticated: [
             Tradehub.Tx,
-            Tradehub.Tx.MsgUpdateProfile,
-            Tradehub.Tx.MsgCreateOrder
+            Tradehub.Tx.MsgCreateOrder,
+            Tradehub.Tx.MsgEditOrder,
+            Tradehub.Tx.MsgCancelOrder,
+            Tradehub.Tx.MsgCancelAllOrders,
+            Tradehub.Tx.MsgSetLeverage,
+            Tradehub.Tx.MsgSetMargin,
+            Tradehub.Tx.MsgSendToken,
+            Tradehub.Tx.MsgWithdraw,
+            Tradehub.Tx.MsgUpdateProfile
           ],
           WebSocket: [Tradehub.Stream]
         ]
