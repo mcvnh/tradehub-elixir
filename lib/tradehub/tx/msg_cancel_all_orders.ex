@@ -10,7 +10,10 @@ defmodule Tradehub.Tx.MsgCancelAllOrders do
 
   defstruct [:market, :originator]
 
-  def validate(params) do
-    {:ok, params}
+  def validate!(message) do
+    if blank?(message.market), do: raise("Market is required")
+    if blank?(message.originator), do: raise("Originator is required")
+
+    message
   end
 end

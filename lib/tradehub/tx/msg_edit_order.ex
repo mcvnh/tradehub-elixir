@@ -3,6 +3,7 @@ defmodule Tradehub.Tx.MsgEditOrder do
 
   def type, do: "order/MsgEditOrder"
 
+  # TODO
   @type t :: %__MODULE__{
           id: String.t(),
           quantity: String.t(),
@@ -13,7 +14,11 @@ defmodule Tradehub.Tx.MsgEditOrder do
 
   defstruct [:id, :quantity, :price, :stop_price, :originator]
 
-  def validate(params) do
-    {:ok, params}
+  def validate!(message) do
+    if blank?(message.id), do: raise("Order ID is required")
+
+    if blank?(message.originator), do: raise("Originator is required")
+
+    message
   end
 end

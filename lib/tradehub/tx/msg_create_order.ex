@@ -9,7 +9,7 @@ defmodule Tradehub.Tx.MsgCreateOrder do
   @type side :: :buy | :sell
 
   @typedoc "Order types supported by the Tradeub"
-  @type(order_type :: :limit, :market, :stop_limit, :stop_market)
+  @type(order_type :: :limit, :market, :"stop-limit", :"stop-market")
 
   @typedoc "Time in force"
   @type time_in_force :: :gtc | :fok | :ioc
@@ -48,8 +48,31 @@ defmodule Tradehub.Tx.MsgCreateOrder do
   @doc """
   Validate the payload.
   """
-  @spec validate(t()) :: {:ok, t()}
-  def validate(message) do
-    {:ok, message}
+  def validate!(message) do
+    if blank?(message.market), do: raise("Market is required")
+
+    if message.market != String.downcase(message.market) do
+      raise("Market must in lowercase")
+    end
+
+    if blank?(message.quantity), do: raise("Quantity is required")
+
+    if blank?(message.type), do: raise("Order type is required")
+
+    if Enum.member?([:limit, :"stop-limit"], message.type) do
+      if blank?(message.price), do: raise("Price is required for limit orders")
+    end
+
+    if message.type == :"stop-limit" do
+      if blank?(message.stop_price), do: raise("Stop price is required for stop limit orders")
+    end
+
+    if Enum.member?([:"stop-limit", :"stop-market"], message.type) do
+      if blank?(message.trigger_type), do: raise("Trigger type is required for stop orders")
+    end
+
+    if blank?(message.originator), do: raise("Originator is required")
+
+    message
   end
 end

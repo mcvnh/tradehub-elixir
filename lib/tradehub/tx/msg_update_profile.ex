@@ -11,7 +11,9 @@ defmodule Tradehub.Tx.MsgUpdateProfile do
 
   defstruct [:username, :twitter, :originator]
 
-  def validate(params) do
-    {:ok, params}
+  def validate!(message) do
+    if blank?(message.originator), do: raise("Please address a originator")
+
+    message
   end
 end

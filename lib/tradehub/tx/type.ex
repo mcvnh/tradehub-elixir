@@ -3,14 +3,17 @@ defmodule Tradehub.Tx.Type do
 
   defmacro __using__(_opts) do
     quote do
+      import Tradehub.Tx.Validator
+
       @behaviour Tradehub.Tx.Validator
 
-      @spec build(map()) :: map()
-      def build(payload) do
+      @spec validate!(__MODULE__.t()) :: __MODULE__.t()
+      @spec compose(map()) :: map()
+
+      def compose(payload) do
         message =
           struct(__MODULE__, payload)
-          |> validate
-          |> elem(1)
+          |> validate!
           |> Map.from_struct()
 
         %{
