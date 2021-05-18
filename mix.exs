@@ -1,12 +1,15 @@
 defmodule Tradehub.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/anhmv/tradehub-elixir"
+  @version "0.1.11"
+
   def project do
     [
       name: "Tradehub",
       app: :tradehub,
-      description: "Tradehub SDK for Elixir",
-      version: "0.1.11",
+      description: "Elixir wrapper for the Switcheo Tradehub API",
+      version: @version,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -17,41 +20,8 @@ defmodule Tradehub.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test
       ],
-      docs: [
-        main: "readme",
-        authors: ["Anh Mac <anhmv91@gmail.com>"],
-        source_url: "https://github.com/anhmv/tradehub-elixir",
-        extras: ["README.md"],
-        groups_for_modules: [
-          Account: [Tradehub.Wallet, Tradehub.Account],
-          Public: [
-            Tradehub.Exchange,
-            Tradehub.Fee,
-            Tradehub.Trade,
-            Tradehub.Ticker,
-            Tradehub.Statistics,
-            Tradehub.Protocol
-          ],
-          Authenticated: [
-            Tradehub.Tx,
-            Tradehub.Tx.MsgCreateOrder,
-            Tradehub.Tx.MsgEditOrder,
-            Tradehub.Tx.MsgCancelOrder,
-            Tradehub.Tx.MsgCancelAllOrders,
-            Tradehub.Tx.MsgSetLeverage,
-            Tradehub.Tx.MsgSetMargin,
-            Tradehub.Tx.MsgSendToken,
-            Tradehub.Tx.MsgWithdraw,
-            Tradehub.Tx.MsgUpdateProfile
-          ],
-          WebSocket: [Tradehub.Stream]
-        ]
-      ],
-      package: [
-        name: "tradehub",
-        licenses: ["MIT"],
-        links: %{"GitHub" => "https://github.com/anhmv/tradehub-elixir"}
-      ]
+      docs: docs(),
+      package: package()
     ]
   end
 
@@ -75,6 +45,47 @@ defmodule Tradehub.MixProject do
       {:phoenix_pubsub, "~> 2.0"},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      authors: ["Anh Mac <anhmv91@gmail.com>"],
+      source_url: @source_url,
+      extras: ["README.md"],
+      groups_for_modules: [
+        Account: [Tradehub.Wallet, Tradehub.Account],
+        Public: [
+          Tradehub.Exchange,
+          Tradehub.Fee,
+          Tradehub.Trade,
+          Tradehub.Ticker,
+          Tradehub.Statistics,
+          Tradehub.Protocol
+        ],
+        Authenticated: [
+          Tradehub.Tx,
+          Tradehub.Tx.MsgCreateOrder,
+          Tradehub.Tx.MsgEditOrder,
+          Tradehub.Tx.MsgCancelOrder,
+          Tradehub.Tx.MsgCancelAllOrders,
+          Tradehub.Tx.MsgSetLeverage,
+          Tradehub.Tx.MsgSetMargin,
+          Tradehub.Tx.MsgSendToken,
+          Tradehub.Tx.MsgWithdraw,
+          Tradehub.Tx.MsgUpdateProfile
+        ],
+        WebSocket: [Tradehub.Stream]
+      ]
+    ]
+  end
+
+  defp package do
+    [
+      name: "tradehub",
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 end
