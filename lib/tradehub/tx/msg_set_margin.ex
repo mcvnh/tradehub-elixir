@@ -12,9 +12,9 @@ defmodule Tradehub.Tx.MsgSetMargin do
   defstruct [:market, :margin, :originator]
 
   def validate!(message) do
-    if blank?(message.market), do: raise("Market is required")
-    if blank?(message.margin), do: raise("Margin is required")
-    if blank?(message.originator), do: raise("Originator is required")
+    if blank?(message.market), do: raise(Tradehub.Tx.MsgInvalid, message: "Market is required")
+    if blank?(message.margin), do: raise(Tradehub.Tx.MsgInvalid, message: "Margin is required")
+    if blank?(message.originator), do: raise(Tradehub.Tx.MsgInvalid, message: "Originator is required")
 
     message
   end

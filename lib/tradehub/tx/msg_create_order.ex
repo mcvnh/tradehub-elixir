@@ -8,7 +8,7 @@ defmodule Tradehub.Tx.MsgCreateOrder do
   @typedoc "The shopping side of the order."
   @type side :: :buy | :sell
 
-  @typedoc "Order types supported by the Tradeub"
+  @typedoc "Order types supported by the Tradehub"
   @type(order_type :: :limit, :market, :"stop-limit", :"stop-market")
 
   @typedoc "Time in force"
@@ -49,29 +49,33 @@ defmodule Tradehub.Tx.MsgCreateOrder do
   Validate the payload.
   """
   def validate!(message) do
-    if blank?(message.market), do: raise("Market is required")
+    if blank?(message.market), do: raise(Tradehub.Tx.MsgInvalid, message: "Market is required")
 
     if message.market != String.downcase(message.market) do
-      raise("Market must in lowercase")
+      raise(Tradehub.Tx.MsgInvalid, message: "Market must in lowercase")
     end
 
-    if blank?(message.quantity), do: raise("Quantity is required")
+    if blank?(message.quantity), do: raise(Tradehub.Tx.MsgInvalid, message: "Quantity is required")
 
-    if blank?(message.type), do: raise("Order type is required")
+    if blank?(message.side), do: raise(Tradehub.Tx.MsgInvalid, message: "Side is required")
+
+    if blank?(message.type), do: raise(Tradehub.Tx.MsgInvalid, message: "Order type is required")
 
     if Enum.member?([:limit, :"stop-limit"], message.type) do
-      if blank?(message.price), do: raise("Price is required for limit orders")
+      if blank?(message.price), do: raise(Tradehub.Tx.MsgInvalid, message: "Price is required for limit orders")
     end
 
     if message.type == :"stop-limit" do
-      if blank?(message.stop_price), do: raise("Stop price is required for stop limit orders")
+      if blank?(message.stop_price),
+        do: raise(Tradehub.Tx.MsgInvalid, message: "Stop price is required for stop limit orders")
     end
 
     if Enum.member?([:"stop-limit", :"stop-market"], message.type) do
-      if blank?(message.trigger_type), do: raise("Trigger type is required for stop orders")
+      if blank?(message.trigger_type),
+        do: raise(Tradehub.Tx.MsgInvalid, message: "Trigger type is required for stop orders")
     end
 
-    if blank?(message.originator), do: raise("Originator is required")
+    if blank?(message.originator), do: raise(Tradehub.Tx.MsgInvalid, message: "Originator is required")
 
     message
   end

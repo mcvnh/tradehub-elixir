@@ -8,9 +8,9 @@ defmodule Tradehub.Tx.Type do
       @behaviour Tradehub.Tx.Validator
 
       @spec validate!(__MODULE__.t()) :: __MODULE__.t()
-      @spec compose(map()) :: map()
+      @spec compose!(map()) :: map()
 
-      def compose(payload) do
+      def compose!(payload) do
         message =
           struct(__MODULE__, payload)
           |> validate!

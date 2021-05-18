@@ -12,6 +12,8 @@ defmodule Tradehub.Statistics do
 
       iex> Tradehub.Statistics.rich_list("swth")
 
+      iex> Tradehub.Statistics.rich_list!("swth")
+
   """
 
   @spec rich_list(String.t()) :: {:ok, list(Tradehub.rich_holder())} | {:error, HTTPoison.Error.t()}

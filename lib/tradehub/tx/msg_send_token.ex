@@ -12,9 +12,9 @@ defmodule Tradehub.Tx.MsgSendToken do
   defstruct [:from_address, :to_address, :amount]
 
   def validate!(message) do
-    if blank?(message.from_address), do: raise("From address is required")
-    if blank?(message.to_address), do: raise("To address is required")
-    if blank?(message.amount), do: raise("Amount is required")
+    if blank?(message.from_address), do: raise(Tradehub.Tx.MsgInvalid, message: "From address is required")
+    if blank?(message.to_address), do: raise(Tradehub.Tx.MsgInvalid, message: "To address is required")
+    if blank?(message.amount), do: raise(Tradehub.Tx.MsgInvalid, message: "Amount is required")
 
     message
   end
