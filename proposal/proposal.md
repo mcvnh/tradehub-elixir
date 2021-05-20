@@ -67,7 +67,7 @@ The target of this deliverable is to allow developers to connect to public, priv
 
 This deliverable ensures that the package runs smoothly without coding mistakes.
 
-- Deliverable 3 (Mid April): House cleaning and documentation
+- Deliverable 3 (Mid July): House cleaning and documentation
 
 The final deliverable makes sure the dependencies are safe to use, gets rid of unused dependencies and unnecessary code.
 Finalize documentation.
