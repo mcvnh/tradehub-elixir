@@ -1,6 +1,8 @@
-defmodule Tradehub.Tx.MsgEditOrder do
+defmodule Tradehub.Tx.EditOrder do
   use Tradehub.Tx.Type
+  alias Tradehub.Tx.MsgInvalid
 
+  @spec type :: String.t()
   def type, do: "order/MsgEditOrder"
 
   # TODO
@@ -15,9 +17,8 @@ defmodule Tradehub.Tx.MsgEditOrder do
   defstruct [:id, :quantity, :price, :stop_price, :originator]
 
   def validate!(message) do
-    if blank?(message.id), do: raise(Tradehub.Tx.MsgInvalid, message: "Order ID is required")
-
-    if blank?(message.originator), do: raise(Tradehub.Tx.MsgInvalid, message: "Originator is required")
+    if blank?(message.id), do: raise(MsgInvalid, message: "Order ID is required")
+    if blank?(message.originator), do: raise(MsgInvalid, message: "Originator is required")
 
     message
   end

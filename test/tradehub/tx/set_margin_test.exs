@@ -1,17 +1,17 @@
-defmodule TradehubTest.Tx.MsgSetLeverageTest do
+defmodule TradehubTest.Tx.SetMarginTest do
   use ExUnit.Case, async: true
 
   alias Tradehub.Tx.MsgInvalid
-  alias Tradehub.Tx.MsgSetLeverage
+  alias Tradehub.Tx.SetMargin
 
-  import Tradehub.Tx.MsgSetLeverage
+  import Tradehub.Tx.SetMargin
 
   setup do
     {
       :ok,
-      payload: %MsgSetLeverage{
+      payload: %SetMargin{
         market: "swth_eth1",
-        leverage: "11",
+        margin: "11",
         originator: "tswth"
       }
     }
@@ -23,9 +23,9 @@ defmodule TradehubTest.Tx.MsgSetLeverageTest do
     end
   end
 
-  test "expects failure when missing leverage", %{payload: payload} do
+  test "expects failure when missing margin", %{payload: payload} do
     assert_raise MsgInvalid, fn ->
-      validate!(%{payload | leverage: nil})
+      validate!(%{payload | margin: nil})
     end
   end
 

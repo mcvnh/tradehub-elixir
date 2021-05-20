@@ -20,7 +20,7 @@ defmodule Tradehub.Tx do
       ...>     twitter: "mvanh91",
       ...>     originator: wallet.address
       ...>   }
-      ...>   |> Tradehub.Tx.MsgUpdateProfile.compose!()
+      ...>   |> Tradehub.Tx.UpdateProfile.compose!()
       iex> {wallet, [message]}
       ...>   |> generate_signing_message()
       ...>   |> sign()
@@ -39,7 +39,7 @@ defmodule Tradehub.Tx do
       ...>     twitter: "mvanh91",
       ...>     originator: wallet.address
       ...>   }
-      ...>   |> Tradehub.Tx.MsgUpdateProfile.compose!()
+      ...>   |> Tradehub.Tx.UpdateProfile.compose!()
       iex> broadcast([message], wallet)
 
   """

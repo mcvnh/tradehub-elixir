@@ -66,15 +66,15 @@ defmodule Tradehub.MixProject do
         ],
         Authenticated: [
           Tradehub.Tx,
-          Tradehub.Tx.MsgCreateOrder,
-          Tradehub.Tx.MsgEditOrder,
-          Tradehub.Tx.MsgCancelOrder,
-          Tradehub.Tx.MsgCancelAllOrders,
-          Tradehub.Tx.MsgSetLeverage,
-          Tradehub.Tx.MsgSetMargin,
-          Tradehub.Tx.MsgSendToken,
-          Tradehub.Tx.MsgWithdraw,
-          Tradehub.Tx.MsgUpdateProfile
+          Tradehub.Tx.CreateOrder,
+          Tradehub.Tx.EditOrder,
+          Tradehub.Tx.CancelOrder,
+          Tradehub.Tx.CancelAllOrders,
+          Tradehub.Tx.SetLeverage,
+          Tradehub.Tx.SetMargin,
+          Tradehub.Tx.SendToken,
+          Tradehub.Tx.Withdraw,
+          Tradehub.Tx.UpdateProfile
         ],
         WebSocket: [Tradehub.Stream]
       ]

@@ -1,9 +1,10 @@
-defmodule Tradehub.Tx.MsgCreateOrder do
+defmodule Tradehub.Tx.CreateOrder do
   @moduledoc """
   The payload message of the `order/CreateOrder` private endpoint.
   """
 
   use Tradehub.Tx.Type
+  alias Tradehub.Tx.MsgInvalid
 
   @typedoc "The shopping side of the order."
   @type side :: :buy | :sell
@@ -43,39 +44,40 @@ defmodule Tradehub.Tx.MsgCreateOrder do
             is_reduce_only: false,
             originator: nil
 
+  @spec type :: String.t()
   def type, do: "order/MsgCreateOrder"
 
   @doc """
   Validate the payload.
   """
   def validate!(message) do
-    if blank?(message.market), do: raise(Tradehub.Tx.MsgInvalid, message: "Market is required")
+    if blank?(message.market), do: raise(MsgInvalid, message: "Market is required")
 
     if message.market != String.downcase(message.market) do
-      raise(Tradehub.Tx.MsgInvalid, message: "Market must in lowercase")
+      raise(MsgInvalid, message: "Market must in lowercase")
     end
 
-    if blank?(message.quantity), do: raise(Tradehub.Tx.MsgInvalid, message: "Quantity is required")
+    if blank?(message.quantity), do: raise(MsgInvalid, message: "Quantity is required")
 
-    if blank?(message.side), do: raise(Tradehub.Tx.MsgInvalid, message: "Side is required")
+    if blank?(message.side), do: raise(MsgInvalid, message: "Side is required")
 
-    if blank?(message.type), do: raise(Tradehub.Tx.MsgInvalid, message: "Order type is required")
+    if blank?(message.type), do: raise(MsgInvalid, message: "Order type is required")
 
     if Enum.member?([:limit, :"stop-limit"], message.type) do
-      if blank?(message.price), do: raise(Tradehub.Tx.MsgInvalid, message: "Price is required for limit orders")
+      if blank?(message.price), do: raise(MsgInvalid, message: "Price is required for limit orders")
     end
 
     if message.type == :"stop-limit" do
       if blank?(message.stop_price),
-        do: raise(Tradehub.Tx.MsgInvalid, message: "Stop price is required for stop limit orders")
+        do: raise(MsgInvalid, message: "Stop price is required for stop limit orders")
     end
 
     if Enum.member?([:"stop-limit", :"stop-market"], message.type) do
       if blank?(message.trigger_type),
-        do: raise(Tradehub.Tx.MsgInvalid, message: "Trigger type is required for stop orders")
+        do: raise(MsgInvalid, message: "Trigger type is required for stop orders")
     end
 
-    if blank?(message.originator), do: raise(Tradehub.Tx.MsgInvalid, message: "Originator is required")
+    if blank?(message.originator), do: raise(MsgInvalid, message: "Originator is required")
 
     message
   end

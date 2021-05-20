@@ -1,15 +1,15 @@
-defmodule TradehubTest.Tx.MsgWithdrawTest do
+defmodule TradehubTest.Tx.WithdrawTest do
   use ExUnit.Case, async: true
 
   alias Tradehub.Tx.MsgInvalid
-  alias Tradehub.Tx.MsgWithdraw
+  alias Tradehub.Tx.Withdraw
 
-  import Tradehub.Tx.MsgWithdraw
+  import Tradehub.Tx.Withdraw
 
   setup do
     {
       :ok,
-      payload: %MsgWithdraw{
+      payload: %Withdraw{
         to_address: "to_address",
         denom: "swth",
         amount: "100000000",

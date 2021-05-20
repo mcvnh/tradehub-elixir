@@ -1,15 +1,15 @@
-defmodule TradehubTest.Tx.MsgCreateOrderTest do
+defmodule TradehubTest.Tx.CreateOrderTest do
   use ExUnit.Case, async: true
 
   alias Tradehub.Tx.MsgInvalid
-  alias Tradehub.Tx.MsgCreateOrder
+  alias Tradehub.Tx.CreateOrder
 
-  import Tradehub.Tx.MsgCreateOrder
+  import Tradehub.Tx.CreateOrder
 
   setup do
     {
       :ok,
-      limit: %MsgCreateOrder{
+      limit: %CreateOrder{
         market: "swth_eth1",
         side: :buy,
         quantity: "1",
@@ -17,14 +17,14 @@ defmodule TradehubTest.Tx.MsgCreateOrderTest do
         type: :limit,
         originator: "tswth"
       },
-      market: %MsgCreateOrder{
+      market: %CreateOrder{
         market: "swth_eth1",
         side: :buy,
         quantity: "1",
         type: :market,
         originator: "tswth"
       },
-      stop_limit: %MsgCreateOrder{
+      stop_limit: %CreateOrder{
         market: "swth_eth1",
         side: :buy,
         quantity: "1",
@@ -34,7 +34,7 @@ defmodule TradehubTest.Tx.MsgCreateOrderTest do
         trigger_type: "unknown",
         originator: "tswth"
       },
-      stop_market: %MsgCreateOrder{
+      stop_market: %CreateOrder{
         market: "swth_eth1",
         side: :buy,
         quantity: "1",

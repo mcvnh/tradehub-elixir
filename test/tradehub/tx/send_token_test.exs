@@ -1,15 +1,15 @@
-defmodule TradehubTest.Tx.MsgSendTokenTest do
+defmodule TradehubTest.Tx.SendTokenTest do
   use ExUnit.Case, async: true
 
   alias Tradehub.Tx.MsgInvalid
-  alias Tradehub.Tx.MsgSendToken
+  alias Tradehub.Tx.SendToken
 
-  import Tradehub.Tx.MsgSendToken
+  import Tradehub.Tx.SendToken
 
   setup do
     {
       :ok,
-      payload: %MsgSendToken{
+      payload: %SendToken{
         from_address: "address_1",
         to_address: "address_2",
         amount: [%{denom: "swth", amount: 1000}]

@@ -227,8 +227,6 @@ defmodule Tradehub.Protocol do
 
       iex> Tradehub.Protocol.transaction_types
 
-      iex> Tradehub.Protocol.transaction_types!
-
   """
 
   @spec transaction_types :: {:ok, list(String.t())} | {:error, HTTPoison.Error.t()}

@@ -1,20 +1,20 @@
-defmodule TradehubTest.Tx.MsgCancelAllOrdersTest do
+defmodule TradehubTest.Tx.CancelAllOrdersTest do
   use ExUnit.Case, async: true
 
   alias Tradehub.Tx.MsgInvalid
-  alias Tradehub.Tx.MsgCancelAllOrders
+  alias Tradehub.Tx.CancelAllOrders
 
-  import Tradehub.Tx.MsgCancelAllOrders
+  import Tradehub.Tx.CancelAllOrders
 
   test "expects failure when missing market" do
     assert_raise MsgInvalid, fn ->
-      validate!(%MsgCancelAllOrders{originator: "tswth"})
+      validate!(%CancelAllOrders{originator: "tswth"})
     end
   end
 
   test "expects failure when missing originator" do
     assert_raise MsgInvalid, fn ->
-      validate!(%MsgCancelAllOrders{market: "swth_eth1"})
+      validate!(%CancelAllOrders{market: "swth_eth1"})
     end
   end
 
