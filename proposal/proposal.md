@@ -17,7 +17,7 @@ OTP (Open Telecom Platform)
 
 #### Owners
 
-- [anhmv91](https://github.com/anhmv91) - the creator of the project.
+- [anhmv](https://github.com/anhmv91) - the creator of the project.
 
 #### Key objectives and value to Switcheo Tradehub and its stakeholders.
 
