@@ -53,7 +53,7 @@ successful projects like games, message brokers, banking, or projects that need 
 I believe this project will viral the Tradehub blockchain to Elixir developers, as well as added liquidity to
 DEMEX pairs.
 
-Also, this is the first step of integrating the DEMEX into a trading platform, such as [![Tai](https://github.com/fremantle-industries/tai)]
+Also, this is the first step of integrating the DEMEX into a trading platform, such as [Tai](https://github.com/fremantle-industries/tai)
 
 ## Project Roadmap and Key Deliverables
 
