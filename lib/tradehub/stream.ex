@@ -22,8 +22,8 @@ defmodule Tradehub.Stream do
 
     case Map.has_key?(decode_msg, :channel) do
       true ->
+        Logger.debug("Received a message from the channel #{decode_msg.channel}, broadcasting the message to observers")
         Phoenix.PubSub.broadcast(Tradehub.PubSub, decode_msg.channel, decode_msg)
-        Logger.debug("Broadcast message to channel #{decode_msg.channel}")
         {:ok, state}
 
       false ->
@@ -31,9 +31,29 @@ defmodule Tradehub.Stream do
     end
   end
 
+  def handle_info(msg, state) do
+    Logger.debug("Received non-websocket message: #{IO.inspect(msg)}")
+    {:ok, state}
+  end
+
   def handle_cast({:send, {type, msg} = frame}, state) do
     Logger.debug("Sending #{type} frame with payload: #{msg}")
     {:reply, frame, state}
+  end
+
+  def handle_cast(msg, state) do
+    Logger.debug("Sending frame with payload: #{msg}")
+    {:reply, msg, state}
+  end
+
+  def handle_ping(ping_frame, state) do
+    Logger.debug("Received a ping frame: #{IO.inspect(ping_frame)}")
+    {:ok, state}
+  end
+
+  def handle_pong(pong_frame, state) do
+    Logger.debug("Received a pong frame: #{IO.inspect(pong_frame)}")
+    {:ok, state}
   end
 
   @doc """
