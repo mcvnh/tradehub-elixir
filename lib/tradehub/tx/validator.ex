@@ -1,9 +1,9 @@
 defmodule Tradehub.Tx.Validator do
-  @moduledoc false
+  @moduledoc """
+  The helper module that provides validation methods
+  """
 
-  @callback validate!(term()) :: term()
-  @callback type :: String.t()
-
+  @spec blank?(any) :: boolean()
   def blank?(nil), do: true
   def blank?(""), do: true
   def blank?([]), do: true

@@ -1,15 +1,76 @@
 defmodule Tradehub.Stream do
-  @moduledoc """
-  This module enables a power to connect with the official Tradehub Demex websocket gateway and provides
-  all functionalities described in this module.
+  @moduledoc ~S"""
+  This module enables the power to interact with the Tradehub Demex socket.
 
-  The module uses Phoenix PubSub to broadcast messages across the system
+  Behinds the scene, this module requires two dependencies to communicate with the socket server, and broadcasting
+  the received messages to listeners: WebSockex, and Phoenix PubSub.
+
+  To subscribe any topics of the websocket server, you can simply do:
+
+  ``` elixir
+  defmodule MyApp.Client do
+    use Tradehub.Stream, topics: ["market_stats", "recent_trades.swth_eth1"]
+
+    def handle_info(message, state) do
+      # Handle you messages here
+      IO.puts(message)
+
+      {:ok, state}
+    end
+  end
+  ```
+
+  `Tradehub.Stream` built based on `GenServer` so you can easily fit into any supervision tree.
+
+  ``` elixir
+  defmodule MyApp.Application do
+    use Application
+
+    def start(_opts, _args) do
+      children = [
+        MyApp.Client
+      ]
+
+      Supervisor.start_link(children, strategy: :one_for_one)
+    end
+  end
+  ```
+
+  Or if you want to manage everything manually, implement your own a process and manualy do subscribe
+  to any topics you want by using utilize functions of `Tradehub.Stream`.
+
+  ```
+  defmodule MyApp.Client do
+    use GenServer
+
+    def start_link(state) do
+      GenServer.start_link(__MODULE__, state, name: __MODULE__)
+    end
+
+    ## Callbacks
+    def init(stack) do
+      # Start listening on the `market_stats` topic
+      Tradehub.Stream.market_stats()
+
+      {:ok, stack}
+    end
+
+    # Handle latest message from the `market_stats` channel
+    def handle_info(msg, state) do
+      IO.puts("Receive message -- #{msg}")
+      {:noreply, state}
+    end
+  end
+  ```
   """
 
   use WebSockex
   require Logger
 
   @ws Application.get_env(:tradehub, :ws, "wss://ws.dem.exchange/ws")
+
+  @typedoc "The channel ID"
+  @type channel_id :: String.t()
 
   defmacro __using__(opts) do
     topics = Keyword.get(opts, :topics)
@@ -45,12 +106,14 @@ defmodule Tradehub.Stream do
     WebSockex.start_link(@ws, __MODULE__, state, name: Stream)
   end
 
-  def handle_frame({_type, msg}, state) do
+  def handle_frame({type, msg}, state) do
+    Logger.debug("#{__MODULE__} received #{type} - #{msg}")
+
     decode_msg = Jason.decode!(msg, keys: :atoms)
 
     case Map.has_key?(decode_msg, :channel) do
       true ->
-        Logger.debug("Received a message from the channel #{decode_msg.channel}, broadcasting the message to observers")
+        Logger.debug("#{__MODULE__} broadcast the message to observers")
         Phoenix.PubSub.broadcast(Tradehub.PubSub, decode_msg.channel, msg)
         {:ok, state}
 
@@ -60,27 +123,27 @@ defmodule Tradehub.Stream do
   end
 
   def handle_info(msg, state) do
-    Logger.debug("Received non-websocket message: #{IO.inspect(msg)}")
+    Logger.debug("#{__MODULE__} received non-websocket message: #{IO.inspect(msg)}")
     {:ok, state}
   end
 
   def handle_cast({:send, {type, msg} = frame}, state) do
-    Logger.debug("Sending #{type} frame with payload: #{IO.inspect(msg)}")
+    Logger.debug("#{__MODULE__} sending #{type} frame with payload: #{IO.inspect(msg)}")
     {:reply, frame, state}
   end
 
   def handle_cast(msg, state) do
-    Logger.debug("Sending frame with payload: #{IO.inspect(msg)}")
+    Logger.debug("#{__MODULE__} sending frame with payload: #{IO.inspect(msg)}")
     {:reply, msg, state}
   end
 
   def handle_ping(ping_frame, state) do
-    Logger.debug("Received a ping frame: #{IO.inspect(ping_frame)}")
+    Logger.debug("#{__MODULE__} received a ping frame: #{IO.inspect(ping_frame)}")
     {:ok, state}
   end
 
   def handle_pong(pong_frame, state) do
-    Logger.debug("Received a pong frame: #{IO.inspect(pong_frame)}")
+    Logger.debug("#{__MODULE__} received a pong frame: #{IO.inspect(pong_frame)}")
     {:ok, state}
   end
 
@@ -94,7 +157,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec subscribe(String.t()) :: :ok | {:error, reason :: any}
+  @spec subscribe(String.t()) :: channel_id() | {:error, reason :: any}
 
   def subscribe(topic) do
     frame_content = %{
@@ -108,7 +171,7 @@ defmodule Tradehub.Stream do
     case WebSockex.send_frame(Stream, frame) do
       :ok ->
         Phoenix.PubSub.subscribe(Tradehub.PubSub, topic)
-        Logger.debug("Starting subscribe messages on channel #{topic}")
+        Logger.debug("#{__MODULE__} starting subscribe messages on channel #{topic}")
         topic
 
       other ->
@@ -156,7 +219,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec account_trades(String.t()) :: :ok | {:error, reason :: any}
+  @spec account_trades(String.t()) :: channel_id() | {:error, reason :: any}
 
   def account_trades(account), do: subscribe("account_trades.#{account}")
 
@@ -171,7 +234,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec account_trades_by_market(String.t(), String.t()) :: :ok | {:error, reason :: any}
+  @spec account_trades_by_market(String.t(), String.t()) :: channel_id() | {:error, reason :: any}
 
   def account_trades_by_market(market, account), do: subscribe("account_trades_by_market.#{market}.#{account}")
 
@@ -186,7 +249,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec balances(String.t()) :: :ok | {:error, reason :: any}
+  @spec balances(String.t()) :: channel_id() | {:error, reason :: any}
 
   def balances(account), do: subscribe("balances.#{account}")
 
@@ -201,7 +264,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec candlesticks(String.t(), String.t()) :: :ok | {:error, reason :: any}
+  @spec candlesticks(String.t(), String.t()) :: channel_id() | {:error, reason :: any}
 
   def candlesticks(market, resolution), do: subscribe("candlesticks.#{market}.#{resolution}")
 
@@ -217,7 +280,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec leverages_by_market(String.t(), String.t()) :: :ok | {:error, reason :: any}
+  @spec leverages_by_market(String.t(), String.t()) :: channel_id() | {:error, reason :: any}
 
   def leverages_by_market(market, account), do: subscribe("leverages_by_market.#{market}.#{account}")
 
@@ -232,7 +295,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec leverages(String.t()) :: :ok | {:error, reason :: any}
+  @spec leverages(String.t()) :: channel_id() | {:error, reason :: any}
 
   def leverages(account), do: subscribe("leverages.#{account}")
 
@@ -247,7 +310,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec market_stats() :: :ok | {:error, reason :: any}
+  @spec market_stats() :: channel_id() | {:error, reason :: any}
 
   def market_stats, do: subscribe("market_stats")
 
@@ -262,7 +325,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec books(String.t()) :: :ok | {:error, reason :: any}
+  @spec books(String.t()) :: channel_id() | {:error, reason :: any}
 
   def books(market), do: subscribe("books.#{market}")
 
@@ -278,7 +341,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec orders_by_market(String.t(), String.t()) :: :ok | {:error, reason :: any}
+  @spec orders_by_market(String.t(), String.t()) :: channel_id() | {:error, reason :: any}
 
   def orders_by_market(market, account), do: subscribe("orders_by_market.#{market}.#{account}")
 
@@ -293,7 +356,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec orders(String.t()) :: :ok | {:error, reason :: any}
+  @spec orders(String.t()) :: channel_id() | {:error, reason :: any}
 
   def orders(account), do: subscribe("orders.#{account}")
 
@@ -308,7 +371,7 @@ defmodule Tradehub.Stream do
       iex> Tradehub.Stream.unsubscribe topic
   """
 
-  @spec positions_by_market(String.t(), String.t()) :: :ok | {:error, reason :: any}
+  @spec positions_by_market(String.t(), String.t()) :: channel_id() | {:error, reason :: any}
 
   def positions_by_market(market, account), do: subscribe("positions.#{market}.#{account}")
 
@@ -323,7 +386,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec positions(String.t()) :: :ok | {:error, reason :: any}
+  @spec positions(String.t()) :: channel_id() | {:error, reason :: any}
 
   def positions(account), do: subscribe("positions.#{account}")
 
@@ -338,7 +401,7 @@ defmodule Tradehub.Stream do
 
   """
 
-  @spec recent_trades(String.t()) :: :ok | {:error, reason :: any}
+  @spec recent_trades(String.t()) :: channel_id() | {:error, reason :: any}
 
   def recent_trades(market), do: subscribe("recent_trades.#{market}")
 end
