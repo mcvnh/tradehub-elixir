@@ -13,8 +13,6 @@ defmodule Tradehub.Exchange do
 
       iex> Tradehub.Exchange.tokens
 
-      iex> Tradehub.Exchange.tokens!
-
   """
 
   @spec tokens :: {:error, HTTPoison.Error.t()} | {:ok, list(Tradehub.token())}
@@ -36,8 +34,6 @@ defmodule Tradehub.Exchange do
 
       iex> Tradehub.Exchange.token("swth")
 
-      iex> Tradehub.Exchange.token!("swth")
-
   """
 
   @spec token(String.t()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.token()}
@@ -58,8 +54,6 @@ defmodule Tradehub.Exchange do
   ## Examples
 
       iex> Tradehub.Exchange.markets
-
-      iex> Tradehub.Exchange.markets!
 
   """
 
@@ -100,8 +94,6 @@ defmodule Tradehub.Exchange do
 
       iex> Tradehub.Exchange.market("swth_eth1")
 
-      iex> Tradehub.Exchange.market!("swth_eth1")
-
   """
 
   @spec market(String.t()) :: {:ok, Tradehub.market()} | {:error, HTTPoison.Error.t()}
@@ -128,8 +120,6 @@ defmodule Tradehub.Exchange do
 
       iex> Tradehub.Exchange.orderbook("swth_eth1")
 
-      iex> Tradehub.Exchange.orderbook!("swth_eth1")
-
   """
 
   @spec orderbook(String.t(), integer) :: {:ok, Tradehub.orderbook()} | {:error, HTTPoison.Error.t()}
@@ -153,8 +143,6 @@ defmodule Tradehub.Exchange do
   ## Examples
 
       iex> Tradehub.Exchange.oracle_results
-
-      iex> Tradehub.Exchange.oracle_results!
 
   """
 
@@ -180,8 +168,6 @@ defmodule Tradehub.Exchange do
 
       iex> Tradehub.Exchange.oracle_result("SIDXBTC")
 
-      iex> Tradehub.Exchange.oracle_result!("SIDXBTC")
-
   """
 
   @spec oracle_result(oracle_id) :: {:ok, Tradehub.oracle()} | {:error, HTTPoison.Error.t()}
@@ -202,8 +188,6 @@ defmodule Tradehub.Exchange do
   ## Examples
 
       iex> Tradehub.Exchange.insurance_balances
-
-      iex> Tradehub.Exchange.insurance_balances!
 
   """
 

@@ -90,36 +90,22 @@ iex(2)> wallet
 This example will do a subscription onto the channel `market_stats`, and print out the received messages.
 
 ``` elixir
-defmodule WatchMarketStats do
-  use GenServer
+defmodule MarketStatsObserver do
+  use Tradehub.Stream,
+  topics: [
+    "market_stats" # Subscribe the topic `market_stats`
+  ]
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
-  end
-
-  ## Callbacks
-
-  def init(stack) do
-    # Start listening on the `market_stats` channel
-    Tradehub.Stream.market_stats()
-
-    # Register myself as the client to handle message from the channel
-    Phoenix.PubSub.subscribe(Tradehub.PubSub, "market_stats")
-
-    {:ok, stack}
-  end
-
-  # Handle latest message from the `market_stats` channel
-  def handle_info(msg, state) do
-    IO.puts("Receive message -- #{inspect(msg)}")
-
+  # Handle recent messages from the topic
+  def handle_info(message, state) do
+    IO.puts("#{message}")
     {:noreply, state}
   end
 end
 ```
 
 ``` elixir
-iex(1)> WatchMarketStats.start_link {}
+iex(1)> MarketStatsObserver.start_link
 ```
 
 Full documentation can be found at [https://hexdocs.pm/tradehub](https://hexdocs.pm/tradehub).

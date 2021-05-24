@@ -19,8 +19,6 @@ defmodule Tradehub.Ticker do
 
       iex> Tradehub.Ticker.candlesticks("swth_eth1", 5, 1610203000, 1610203000)
 
-      iex> Tradehub.Ticker.candlesticks!("swth_eth1", 5, 1610203000, 1610203000)
-
   """
 
   @spec candlesticks(String.t(), integer, integer, integer) ::
@@ -52,8 +50,6 @@ defmodule Tradehub.Ticker do
 
       iex> Tradehub.Ticker.prices("swth_eth1")
 
-      iex> Tradehub.Ticker.prices!("swth_eth1")
-
   """
 
   @spec prices(String.t()) :: {:ok, Tradehub.ticker_prices()} | {:error, HTTPoison.Error.t()}
@@ -78,9 +74,6 @@ defmodule Tradehub.Ticker do
 
       iex> Tradehub.Ticker.market_stats
       iex> Tradehub.Ticker.market_stats("swth_eth1")
-
-      iex> Tradehub.Ticker.market_stats!
-      iex> Tradehub.Ticker.market_stats!("swth_eth1")
 
   """
 

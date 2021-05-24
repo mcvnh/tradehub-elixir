@@ -12,8 +12,6 @@ defmodule Tradehub.Fee do
 
       iex> Tradehub.Fee.txns_fees
 
-      iex> Tradehub.Fee.txns_fees!
-
   """
 
   @spec txns_fees :: {:ok, Tradehub.txns_fees()} | {:error, HTTPoison.Error.t()}
@@ -34,8 +32,6 @@ defmodule Tradehub.Fee do
   ## Examples
 
       iex> Tradehub.Fee.current_fee("swth")
-
-      iex> Tradehub.Fee.current_fee!("swth")
 
   """
 
