@@ -66,6 +66,8 @@ defmodule Tradehub.MixProject do
         ],
         Authenticated: [
           Tradehub.Tx,
+          Tradehub.Tx.Type,
+          Tradehub.Tx.Validator,
           Tradehub.Tx.CreateOrder,
           Tradehub.Tx.EditOrder,
           Tradehub.Tx.CancelOrder,
