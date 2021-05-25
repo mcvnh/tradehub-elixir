@@ -5,7 +5,6 @@ defmodule Tradehub.Tx.CreateSubAccount do
   @spec type :: String.t()
   def type, do: "subaccount/MsgCreateSubAccountV1"
 
-  # TODO
   @type t :: %__MODULE__{
           sub_address: String.t(),
           originator: String.t()

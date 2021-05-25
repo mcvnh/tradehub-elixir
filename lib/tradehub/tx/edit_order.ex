@@ -5,7 +5,6 @@ defmodule Tradehub.Tx.EditOrder do
   @spec type :: String.t()
   def type, do: "order/MsgEditOrder"
 
-  # TODO
   @type t :: %__MODULE__{
           id: String.t(),
           quantity: String.t(),
