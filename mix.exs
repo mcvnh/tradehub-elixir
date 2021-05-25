@@ -2,7 +2,7 @@ defmodule Tradehub.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/anhmv/tradehub-elixir"
-  @version "0.1.14"
+  @version "0.1.15"
 
   def project do
     [
@@ -56,27 +56,29 @@ defmodule Tradehub.MixProject do
       extras: ["README.md"],
       groups_for_modules: [
         Account: [Tradehub.Wallet, Tradehub.Account],
+        Authenticated: [
+          Tradehub.Tx,
+          Tradehub.Tx.ActivateSubAccount,
+          Tradehub.Tx.CancelAllOrders,
+          Tradehub.Tx.CancelOrder,
+          Tradehub.Tx.CreateOrder,
+          Tradehub.Tx.CreateSubAccount,
+          Tradehub.Tx.EditOrder,
+          Tradehub.Tx.SendToken,
+          Tradehub.Tx.SetLeverage,
+          Tradehub.Tx.SetMargin,
+          Tradehub.Tx.Type,
+          Tradehub.Tx.UpdateProfile,
+          Tradehub.Tx.Validator,
+          Tradehub.Tx.Withdraw
+        ],
         Public: [
           Tradehub.Exchange,
           Tradehub.Fee,
-          Tradehub.Trade,
-          Tradehub.Ticker,
+          Tradehub.Protocol,
           Tradehub.Statistics,
-          Tradehub.Protocol
-        ],
-        Authenticated: [
-          Tradehub.Tx,
-          Tradehub.Tx.Type,
-          Tradehub.Tx.Validator,
-          Tradehub.Tx.CreateOrder,
-          Tradehub.Tx.EditOrder,
-          Tradehub.Tx.CancelOrder,
-          Tradehub.Tx.CancelAllOrders,
-          Tradehub.Tx.SetLeverage,
-          Tradehub.Tx.SetMargin,
-          Tradehub.Tx.SendToken,
-          Tradehub.Tx.Withdraw,
-          Tradehub.Tx.UpdateProfile
+          Tradehub.Ticker,
+          Tradehub.Trade
         ],
         WebSocket: [Tradehub.Stream]
       ]
