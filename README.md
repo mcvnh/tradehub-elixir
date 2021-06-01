@@ -29,7 +29,7 @@ The package can be installed by adding `tradehub` to your dependencies in `mix.e
 ``` elixir
 def deps do
   [
-    {:tradehub, "~> 0.1.10"}
+    {:tradehub, "~> 0.1.16"}
   ]
 end
 ```
@@ -116,4 +116,6 @@ Full documentation can be found at [https://hexdocs.pm/tradehub](https://hexdocs
   * [x] Public endpoints
   * [x] Websocket
   * [x] Handling of authentication
-  * [ ] Private endpoints <- doing
+  * [x] Private endpoints
+  * [ ] Cover code coverage <- doing
+  * [ ] Documentationn

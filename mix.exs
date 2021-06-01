@@ -37,6 +37,7 @@ defmodule Tradehub.MixProject do
   defp deps do
     [
       {:libsecp256k1, ">= 0.1.10"},
+      {:basefiftyeight, "~> 0.1.0"},
       {:pbkdf2_elixir, ">= 1.3.0"},
       {:bech32, "~> 1.0.0"},
       {:httpoison, "~> 1.8.0"},
