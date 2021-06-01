@@ -6,6 +6,7 @@ defmodule Tradehub.Tx.Validator do
   @spec blank?(any) :: boolean()
   def blank?(nil), do: true
   def blank?(""), do: true
+  def blank?(%{}), do: true
   def blank?([]), do: true
   def blank?(_), do: false
 end

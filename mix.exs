@@ -2,7 +2,7 @@ defmodule Tradehub.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/anhmv/tradehub-elixir"
-  @version "0.1.15"
+  @version "0.1.16"
 
   def project do
     [
@@ -59,18 +59,28 @@ defmodule Tradehub.MixProject do
         Authenticated: [
           Tradehub.Tx,
           Tradehub.Tx.ActivateSubAccount,
+          Tradehub.Tx.AddLiquidity,
           Tradehub.Tx.CancelAllOrders,
           Tradehub.Tx.CancelOrder,
+          Tradehub.Tx.ClaimPoolRewards,
           Tradehub.Tx.CreateOrder,
           Tradehub.Tx.CreateSubAccount,
+          Tradehub.Tx.CreateValidator,
+          Tradehub.Tx.DelegateTokens,
           Tradehub.Tx.EditOrder,
+          Tradehub.Tx.RedelegatingTokens,
+          Tradehub.Tx.RemoveLiquidity,
           Tradehub.Tx.SendToken,
           Tradehub.Tx.SetLeverage,
           Tradehub.Tx.SetMargin,
+          Tradehub.Tx.StakePoolToken,
           Tradehub.Tx.Type,
+          Tradehub.Tx.UnbondingTokens,
+          Tradehub.Tx.UnstakePoolToken,
           Tradehub.Tx.UpdateProfile,
           Tradehub.Tx.Validator,
-          Tradehub.Tx.Withdraw
+          Tradehub.Tx.Withdraw,
+          Tradehub.Tx.WithdrawDelegatorRewards
         ],
         Public: [
           Tradehub.Exchange,
