@@ -5,6 +5,7 @@ defmodule Tradehub.Wallet do
 
   require Logger
   import Tradehub.Raising
+  alias Tradehub.ExtendedKey
 
   @network Application.get_env(:tradehub, :network, :testnet)
 

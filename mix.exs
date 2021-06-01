@@ -29,15 +29,15 @@ defmodule Tradehub.MixProject do
   def application do
     [
       mod: {Tradehub.App, []},
-      extra_applications: [:logger, :crypto, :httpoison, :websockex]
+      extra_applications: [:logger, :crypto, :httpoison, :websockex, :libsecp256k1]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:libsecp256k1, ">= 0.1.10"},
       {:pbkdf2_elixir, ">= 1.3.0"},
-      {:extended_key, "~> 0.3.0"},
       {:bech32, "~> 1.0.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.2.2"},
