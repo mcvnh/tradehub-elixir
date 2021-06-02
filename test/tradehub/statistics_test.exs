@@ -1,5 +1,5 @@
 defmodule TradehubTest.StatisticsTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   doctest Tradehub.Statistics
 
   test "GET rich_list should returns a valid repsonse" do

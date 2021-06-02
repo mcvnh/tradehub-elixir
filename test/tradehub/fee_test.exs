@@ -1,6 +1,6 @@
 defmodule TradehubTest.FeeTest do
-  use ExUnit.Case, async: false
-  # doctest Tradehub.Fee
+  use ExUnit.Case, async: true
+  doctest Tradehub.Fee
 
   test "GET txns_fees should responses a valid result" do
     result = Tradehub.Fee.txns_fees!()

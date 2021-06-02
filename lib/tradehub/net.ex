@@ -14,7 +14,13 @@ defmodule Tradehub.Net do
     |> decode_response()
   end
 
-  @doc false
+  def process_request_options(options) do
+    case Mix.env() do
+      :prod -> options
+      _ -> options ++ [timeout: 60000, recv_timeout: 60000]
+    end
+  end
+
   def decode_response(body) do
     case Jason.decode(body, keys: :atoms) do
       {:ok, data} -> data

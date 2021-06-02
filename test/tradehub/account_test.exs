@@ -1,5 +1,5 @@
 defmodule TradehubTest.AccountTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   doctest Tradehub.Account
 
   # tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj

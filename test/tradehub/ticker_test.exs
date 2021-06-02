@@ -1,6 +1,6 @@
 defmodule TradehubTest.TickerTest do
-  use ExUnit.Case, async: false
-  # doctest Tradehub.Ticker
+  use ExUnit.Case, async: true
+  doctest Tradehub.Ticker
 
   test "GET candlestick should return a valid response body" do
     result = Tradehub.Ticker.candlesticks!("swth_eth1", 30, 161_020_300, 170_020_300)

@@ -1,6 +1,7 @@
 import Config
 
 config :tradehub,
+  http_client: Tradehub.Net,
   network: :mainnet,
   rest: "https://tradescan.switcheo.org/",
   ws: "wss://ws.dem.exchange/ws",

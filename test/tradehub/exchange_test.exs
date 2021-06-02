@@ -1,6 +1,6 @@
 defmodule TradehubTest.ExchangeTest do
-  use ExUnit.Case, async: false
-  # doctest Tradehub.Exchange
+  use ExUnit.Case, async: true
+  doctest Tradehub.Exchange
 
   test "GET tokens should returns a valid response" do
     tokens = Tradehub.Exchange.tokens!()

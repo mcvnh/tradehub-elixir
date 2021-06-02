@@ -1,6 +1,6 @@
 defmodule TradehubTest.ProtocolTest do
-  use ExUnit.Case, async: false
-  # doctest Tradehub.Protocol
+  use ExUnit.Case, async: true
+  doctest Tradehub.Protocol
 
   test "GET protocol status should returns a valid response" do
     status = Tradehub.Protocol.status!()
@@ -46,8 +46,6 @@ defmodule TradehubTest.ProtocolTest do
       assert String.valid?(y.amount)
       assert String.valid?(y.denom)
     end)
-
-    IO.inspect(rewards)
   end
 
   test "GET delegation rewards should return an error message when something invalid" do
