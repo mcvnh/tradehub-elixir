@@ -1,6 +1,11 @@
 defmodule TradehubTest.FeeTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Fee
+
+  setup do
+    env = Application.get_all_env(:tradehub)
+    on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
+  end
 
   test "GET txns_fees should responses a valid result" do
     result = Tradehub.Fee.txns_fees!()
@@ -18,6 +23,18 @@ defmodule TradehubTest.FeeTest do
     result = Tradehub.Fee.current_fee!("swth_hehe")
 
     assert String.valid?(result)
+  end
+
+  test "expects failures" do
+    Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Fee.txns_fees!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Fee.current_fee!("swth")
+    end
   end
 
   # Helper functions

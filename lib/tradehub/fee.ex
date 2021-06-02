@@ -53,10 +53,10 @@ defmodule Tradehub.Fee do
   @spec current_fee!(denom :: String.t()) :: Tradehub.withdrawal_fee() | String.t()
 
   def current_fee(withdrawal_token) do
-    request = HTTPoison.get("https://fees.switcheo.org/fees", [], params: %{denom: String.downcase(withdrawal_token)})
+    request = Tradehub.get("https://fees.switcheo.org/fees", params: %{denom: String.downcase(withdrawal_token)})
 
     case request do
-      {:ok, response} -> {:ok, response.body |> Tradehub.Net.decode_response()}
+      {:ok, response} -> {:ok, response.body}
       other -> other
     end
   end

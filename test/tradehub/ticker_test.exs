@@ -1,6 +1,11 @@
 defmodule TradehubTest.TickerTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Ticker
+
+  setup do
+    env = Application.get_all_env(:tradehub)
+    on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
+  end
 
   test "GET candlestick should return a valid response body" do
     result = Tradehub.Ticker.candlesticks!("swth_eth1", 30, 161_020_300, 170_020_300)
@@ -38,6 +43,22 @@ defmodule TradehubTest.TickerTest do
     result = Tradehub.Ticker.market_stats!("hehehe")
 
     assert String.valid?(result)
+  end
+
+  test "expects failures" do
+    Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Ticker.candlesticks!("swth_eth1", 30, 161_020_300, 170_020_300)
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Ticker.prices!("swth_eth1")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Ticker.market_stats!()
+    end
   end
 
   # Helper functions

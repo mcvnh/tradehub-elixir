@@ -409,15 +409,15 @@ defmodule Tradehub do
             }
         }
 
-  @http_client Application.fetch_env!(:tradehub, :http_client)
-
   @doc false
   def get(url, options \\ [], headers \\ []) do
-    @http_client.get(url, headers, options)
+    http_client = Application.fetch_env!(:tradehub, :http_client)
+    http_client.get(url, headers, options)
   end
 
   @doc false
   def send(body, options \\ [], headers \\ []) do
-    @http_client.post("txs", body, headers, options)
+    http_client = Application.fetch_env!(:tradehub, :http_client)
+    http_client.post("txs", body, headers, options)
   end
 end

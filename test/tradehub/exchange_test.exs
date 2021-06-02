@@ -1,6 +1,11 @@
 defmodule TradehubTest.ExchangeTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Exchange
+
+  setup do
+    env = Application.get_all_env(:tradehub)
+    on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
+  end
 
   test "GET tokens should returns a valid response" do
     tokens = Tradehub.Exchange.tokens!()
@@ -118,6 +123,42 @@ defmodule TradehubTest.ExchangeTest do
       assert String.valid?(x.denom)
       assert String.valid?(x.amount)
     end)
+  end
+
+  test "expects failures" do
+    Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.tokens!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.token!("foobar")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.markets!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.market!("swth_eth1")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.orderbook!("swth_eth1", 20)
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.oracle_results!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.oracle_result!("DETH")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Exchange.insurance_balances!()
+    end
   end
 
   # Helper function

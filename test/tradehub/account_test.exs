@@ -1,6 +1,11 @@
 defmodule TradehubTest.AccountTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Account
+
+  setup do
+    env = Application.get_all_env(:tradehub)
+    on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
+  end
 
   # tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj
 
@@ -18,6 +23,24 @@ defmodule TradehubTest.AccountTest do
   test "GET profile should retuens a correct response" do
     profile = Tradehub.Account.profile!("tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj")
     assert_profile!(profile)
+  end
+
+  test "expects failures" do
+    Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Account.account!("tswththisoneneverexistsonthetradehubchain")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Account.profile!("tswththisoneneverexistsonthetradehubchain")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Account.address!("anhmv")
+    end
+
+    assert Tradehub.Account.username?("anhmv") == false
   end
 
   # Helper functions
