@@ -10,7 +10,7 @@ defmodule Tradehub.Statistics do
 
   ## Examples
 
-      iex> Tradehub.Statistics.rich_list("swth")
+      iex> Tradehub.Statistics.rich_list!("swth")
 
   """
 

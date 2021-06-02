@@ -36,8 +36,8 @@ defmodule Tradehub.Exchange do
 
   """
 
-  @spec token(String.t()) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.token()}
-  @spec token!(String.t()) :: Tradehub.token()
+  @spec token(String.t()) :: {:error, HTTPoison.Error.t()} | String.t() | {:ok, Tradehub.token()}
+  @spec token!(String.t()) :: Tradehub.token() | String.t()
 
   def token(denom) do
     case Tradehub.get("get_token", params: %{token: String.downcase(denom)}) do
@@ -96,8 +96,8 @@ defmodule Tradehub.Exchange do
 
   """
 
-  @spec market(String.t()) :: {:ok, Tradehub.market()} | {:error, HTTPoison.Error.t()}
-  @spec market!(String.t()) :: Tradehub.market()
+  @spec market(String.t()) :: {:ok, Tradehub.market()} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec market!(String.t()) :: Tradehub.market() | String.t()
 
   def market(market) do
     case Tradehub.get("get_market", params: %{market: String.downcase(market)}) do

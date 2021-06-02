@@ -7,10 +7,7 @@ defmodule Tradehub.Account do
   import Tradehub.Raising
 
   @doc """
-  Request information about the given `account`.
-
-  This endpoint returns numbers which are NOT human readable values. Consider `base_precision` and
-  `quote_precision` to calculate a multiplication factor = 10 ^ (`base_precision` - `quote_precisions`).
+  Get account details of the given wallet address
 
   ## Examples
 
@@ -30,15 +27,15 @@ defmodule Tradehub.Account do
           }
         }}
 
-      iex> Tradehub.Account.account!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
-
   """
 
-  @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account()}
-  @spec account!(any) :: Tradehub.account()
+  @spec account(any) :: {:error, HTTPoison.Error.t()} | {:ok, Tradehub.account()} | {:ok, %{error: String.t()}}
+  @spec account!(any) :: Tradehub.account() | %{error: String.t()}
 
   def account(account) do
-    case Tradehub.get("get_account", params: %{account: account}) do
+    request = Tradehub.get("get_account", params: %{account: account})
+
+    case request do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -47,7 +44,7 @@ defmodule Tradehub.Account do
   raising(:account, account)
 
   @doc """
-  Get profile from a TradeHub Wallet.
+  Get profile details of the given wallet address.
 
   ## Examples
 
@@ -60,8 +57,6 @@ defmodule Tradehub.Account do
           twitter: "",
           username: ""
         }}
-
-      iex> Tradehub.Account.profile!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
 
   """
 
@@ -83,9 +78,6 @@ defmodule Tradehub.Account do
   If no address is found an exception with status code 404 will be raised.
 
   ## Examples
-
-      iex> Tradehub.Account.address("tradehub_new_ver_found")
-      {:ok, "\n"}
 
       iex> Tradehub.Account.address!("tradehub_new_ver_found")
       "\n"

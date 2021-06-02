@@ -14,7 +14,8 @@ defmodule Tradehub.Net do
     |> decode_response()
   end
 
-  defp decode_response(body) do
+  @doc false
+  def decode_response(body) do
     case Jason.decode(body, keys: :atoms) do
       {:ok, data} -> data
       {:error, error} -> error.data

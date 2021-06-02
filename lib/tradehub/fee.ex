@@ -6,7 +6,12 @@ defmodule Tradehub.Fee do
   import Tradehub.Raising
 
   @doc """
-  Requests a lists of transaction fees that been configured for particular message types
+  Get a list of transaction fees that been configured for a specific message
+
+  ## Returns
+
+  - an object type `Tradehub.txns_fees()` as expected.
+  - an error when someting goes wrong with the connection.
 
   ## Examples
 
@@ -18,7 +23,9 @@ defmodule Tradehub.Fee do
   @spec txns_fees! :: Tradehub.txns_fees()
 
   def txns_fees do
-    case Tradehub.get("get_txns_fees") do
+    request = Tradehub.get("get_txns_fees")
+
+    case request do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -27,7 +34,13 @@ defmodule Tradehub.Fee do
   raising(:txns_fees)
 
   @doc """
-  Requests the current fees of the given withdrawal token denom.
+  Get the latest fees of the given denom.
+
+  ## Returns
+
+  - an object type `Tradehub.withdrawal_fee()` as expected.
+  - a string when the denom is invalid or something went wrong in the API side.
+  - an error when someting goes wrong with the connection.
 
   ## Examples
 
@@ -35,12 +48,15 @@ defmodule Tradehub.Fee do
 
   """
 
-  @spec current_fee(denom :: String.t()) :: {:ok, Tradehub.withdrawal_fee()} | {:error, HTTPoison.Error.t()}
-  @spec current_fee!(denom :: String.t()) :: Tradehub.withdrawal_fee()
+  @spec current_fee(denom :: String.t()) ::
+          {:ok, Tradehub.withdrawal_fee()} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec current_fee!(denom :: String.t()) :: Tradehub.withdrawal_fee() | String.t()
 
   def current_fee(withdrawal_token) do
-    case HTTPoison.get("https://fees.switcheo.org/fees", [], params: %{denom: String.downcase(withdrawal_token)}) do
-      {:ok, response} -> {:ok, response.body |> Jason.decode!(keys: :atoms)}
+    request = HTTPoison.get("https://fees.switcheo.org/fees", [], params: %{denom: String.downcase(withdrawal_token)})
+
+    case request do
+      {:ok, response} -> {:ok, response.body |> Tradehub.Net.decode_response()}
       other -> other
     end
   end

@@ -39,13 +39,13 @@ defmodule Tradehub do
           name: text,
           symbol: text,
           denom: text,
-          decimals: text,
+          decimals: integer(),
           blockchain: text,
-          chain_id: text,
+          chain_id: integer(),
           asset_id: text,
-          is_active: text,
-          is_collateral: text,
-          lockproxy_hash: text,
+          is_active: boolean(),
+          is_collateral: boolean(),
+          lock_proxy_hash: text,
           delegated_supply: text,
           originator: text
         }
@@ -81,9 +81,9 @@ defmodule Tradehub do
   @type market :: %{
           base: text,
           base_name: text,
-          base_precision: text,
-          closed_block_height: text,
-          created_block_height: text,
+          base_precision: integer(),
+          closed_block_height: integer(),
+          created_block_height: integer(),
           description: text,
           display_name: text,
           expiry_time: text,
@@ -91,21 +91,21 @@ defmodule Tradehub do
           index_oracle_id: text,
           initial_margin_base: text,
           initial_margin_step: text,
-          is_active: text,
-          is_settled: text,
-          last_price_protected_band: text,
+          is_active: boolean(),
+          is_settled: boolean(),
+          last_price_protected_band: integer(),
           lot_size: text,
           maintenance_margin_ratio: text,
           maker_fee: text,
-          mark_price_band: text,
+          mark_price_band: integer(),
           market_type: text,
-          max_liquidation_order_duration: text,
+          max_liquidation_order_duration: integer(),
           max_liquidation_order_ticket: text,
           min_quantity: text,
           name: text,
           quote: text,
           quote_name: text,
-          quote_precision: text,
+          quote_precision: integer(),
           risk_step_size: text,
           taker_fee: text,
           tick_size: text,
@@ -116,7 +116,7 @@ defmodule Tradehub do
           block_height: text,
           data: text,
           oracle_id: text,
-          timestamp: text
+          timestamp: integer()
         }
 
   @type orderbook_record :: %{price: text, quantity: text}
@@ -195,7 +195,7 @@ defmodule Tradehub do
                 },
               sync_info:
                 sync_info :: %{
-                  catching_up: boolean,
+                  catching_up: boolean(),
                   earliest_app_hash: text,
                   earliest_block_hash: text,
                   earliest_block_height: text,
@@ -218,6 +218,7 @@ defmodule Tradehub do
             }
         }
 
+  # Their naming conversion is suck
   @type validator :: %{
           BondStatus: text,
           Commission:
@@ -242,18 +243,18 @@ defmodule Tradehub do
               security_contact: text,
               website: text
             },
-          Jailed: boolean,
+          Jailed: boolean(),
           MinSelfDelegation: text,
           OperatorAddress: text,
-          Status: text,
+          Status: integer(),
           Tokens: text,
           UnbondingCompletionTime: text,
-          UnbondingHeight: integer,
+          UnbondingHeight: integer(),
           WalletAddress: text
         }
 
   @type delegation_rewards :: %{
-          height: integer,
+          height: text(),
           result:
             delegation_rewards_result :: %{
               rewards:

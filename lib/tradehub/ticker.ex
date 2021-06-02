@@ -5,6 +5,9 @@ defmodule Tradehub.Ticker do
 
   import Tradehub.Raising
 
+  @typedoc "Candlestick resolution allowed value"
+  @type resolution :: 1 | 5 | 30 | 60 | 360 | 1440
+
   @doc """
   Requests candlesticks for the given market.
 
@@ -15,16 +18,22 @@ defmodule Tradehub.Ticker do
   - **from**: the start of time range for data in epoch `seconds`
   - **to**: the end of time range for data in epoch `seconds`
 
+  ## Returns
+
+  - a list of `Tradehub.candlestick()` as expected
+  - a string that represents of an error
+  - an error if something goes wrong with the connection
+
   ## Examples
 
       iex> Tradehub.Ticker.candlesticks("swth_eth1", 5, 1610203000, 1610203000)
 
   """
 
-  @spec candlesticks(String.t(), integer, integer, integer) ::
-          {:ok, list(Tradehub.candlestick())} | {:error, HTTPoison.Error.t()}
-  @spec candlesticks!(String.t(), integer, integer, integer) ::
-          list(Tradehub.candlestick())
+  @spec candlesticks(String.t(), resolution(), integer, integer) ::
+          {:ok, list(Tradehub.candlestick())} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec candlesticks!(String.t(), resolution(), integer, integer) ::
+          list(Tradehub.candlestick()) | String.t()
 
   def candlesticks(market, resolution, from, to) do
     case Tradehub.get(
@@ -44,7 +53,17 @@ defmodule Tradehub.Ticker do
   raising(:candlesticks, market, resolution, from, to)
 
   @doc """
-  Requests prices of the given market.
+  Get recent ticker prices of the given market.
+
+  ## Returns
+
+  - an object of type `Tradehub.ticker_prices()` as expected
+  - an error if something goes wrong with the connection
+
+  ## Note
+
+  The `GET /get_prices` endpoint is not completely implemented, it always responses
+  an object of type `Tradehub.ticker_prices()` although the market param is invalid
 
   ## Examples
 
@@ -56,10 +75,13 @@ defmodule Tradehub.Ticker do
   @spec prices!(String.t()) :: Tradehub.ticker_prices()
 
   def prices(market) do
-    case Tradehub.get(
-           "get_prices",
-           params: %{market: market}
-         ) do
+    request =
+      Tradehub.get(
+        "get_prices",
+        params: %{market: market}
+      )
+
+    case request do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end
@@ -70,6 +92,12 @@ defmodule Tradehub.Ticker do
   @doc """
   Requests latest statistics information about the given market or all markets
 
+  ## Returns
+
+  - a list of `Tradehub.market_stats()` as expected
+  - a string that represents of an error
+  - an error if something goes wrong with the connection
+
   ## Examples
 
       iex> Tradehub.Ticker.market_stats
@@ -78,16 +106,19 @@ defmodule Tradehub.Ticker do
   """
 
   @spec market_stats(nil) ::
-          {:ok, list(Tradehub.market_stats())} | {:error, HTTPoison.Error.t()}
+          {:ok, list(Tradehub.market_stats())} | String.t() | {:error, HTTPoison.Error.t()}
   @spec market_stats(String.t()) ::
-          {:ok, list(Tradehub.market_stats())} | {:error, HTTPoison.Error.t()}
-  @spec market_stats!(String.t()) :: list(Tradehub.market_stats())
+          {:ok, list(Tradehub.market_stats())} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec market_stats!(String.t()) :: list(Tradehub.market_stats()) | String.t()
 
   def market_stats(market \\ nil) do
-    case Tradehub.get(
-           "get_market_stats",
-           params: %{market: market}
-         ) do
+    request =
+      Tradehub.get(
+        "get_market_stats",
+        params: %{market: market}
+      )
+
+    case request do
       {:ok, response} -> {:ok, response.body}
       other -> other
     end

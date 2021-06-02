@@ -77,8 +77,9 @@ defmodule Tradehub.Protocol do
 
   """
 
-  @spec delegation_rewards(String.t()) :: {:ok, Tradehub.delegation_rewards()} | {:error, HTTPoison.Error.t()}
-  @spec delegation_rewards!(String.t()) :: Tradehub.delegation_rewards()
+  @spec delegation_rewards(String.t()) ::
+          {:ok, Tradehub.delegation_rewards()} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec delegation_rewards!(String.t()) :: Tradehub.delegation_rewards() | String.t()
 
   def delegation_rewards(account) do
     case Tradehub.get(
