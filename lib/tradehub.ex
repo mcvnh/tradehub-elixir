@@ -290,6 +290,24 @@ defmodule Tradehub do
           username: text
         }
 
+  @type transaction_details :: %{
+          id: text,
+          hash: text,
+          address: text,
+          msgs:
+            msgs :: %{
+              msg_type: text(),
+              msg: text()
+            },
+          code: text,
+          gas_used: text,
+          gas_limit: text,
+          memo: text,
+          block_time: text,
+          height: text,
+          username: text
+        }
+
   @type protocol_balance :: %{
           available: text,
           denom: text,

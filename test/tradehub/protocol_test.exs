@@ -1,6 +1,11 @@
 defmodule TradehubTest.ProtocolTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Tradehub.Protocol
+
+  setup do
+    env = Application.get_all_env(:tradehub)
+    on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
+  end
 
   test "GET protocol status should returns a valid response" do
     status = Tradehub.Protocol.status!()
@@ -52,6 +57,144 @@ defmodule TradehubTest.ProtocolTest do
     msg = Tradehub.Protocol.delegation_rewards!("tswth")
 
     assert String.valid?(msg)
+  end
+
+  test "GET blocks should return a valid response" do
+    blocks = Tradehub.Protocol.blocks!()
+
+    blocks
+    |> Enum.each(fn x ->
+      assert String.valid?(x.block_height)
+      assert String.valid?(x.time)
+      assert String.valid?(x.count)
+      assert String.valid?(x.proposer_address)
+    end)
+  end
+
+  test "GET blocks should returns an error message in case of invalid params" do
+    msg = Tradehub.Protocol.blocks!(%{before_id: -1})
+
+    assert String.valid?(msg)
+  end
+
+  test "GET transactions should returns a valid response" do
+    transactions = Tradehub.Protocol.transactions!()
+
+    transactions
+    |> Enum.each(fn x ->
+      assert String.valid?(x.address)
+      assert String.valid?(x.block_time)
+      assert String.valid?(x.code)
+      assert String.valid?(x.gas_limit)
+      assert String.valid?(x.gas_used)
+      assert String.valid?(x.hash)
+      assert String.valid?(x.height)
+      assert String.valid?(x.id)
+      assert String.valid?(x.memo)
+      assert String.valid?(x.msg)
+      assert String.valid?(x.msg_type)
+      assert String.valid?(x.username)
+    end)
+  end
+
+  test "GET transactions should returns an error message in case of invalid params" do
+    msg = Tradehub.Protocol.transactions!(%{end_block: -1})
+
+    assert String.valid?(msg)
+  end
+
+  test "GET transaction of a hash should returns a valid response" do
+    hash = Tradehub.Protocol.transactions!() |> List.first() |> Map.get(:hash)
+
+    transaction = Tradehub.Protocol.transaction!(hash)
+
+    assert String.valid?(transaction.address)
+    assert String.valid?(transaction.block_time)
+    assert String.valid?(transaction.code)
+    assert String.valid?(transaction.gas_limit)
+    assert String.valid?(transaction.gas_used)
+    assert String.valid?(transaction.hash)
+    assert String.valid?(transaction.height)
+    assert String.valid?(transaction.id)
+    assert String.valid?(transaction.memo)
+    assert String.valid?(transaction.username)
+
+    transaction.msgs
+    |> Enum.each(fn x ->
+      assert String.valid?(x.msg)
+      assert String.valid?(x.msg_type)
+    end)
+  end
+
+  test "GET transaction should returns an error message in case of invalid hash" do
+    msg = Tradehub.Protocol.transaction!("")
+
+    assert String.valid?(msg)
+  end
+
+  test "GET transaction types should returns a valid response" do
+    types = Tradehub.Protocol.transaction_types!()
+
+    types
+    |> Enum.each(fn x ->
+      assert String.valid?(x)
+    end)
+  end
+
+  test "GET total balances should returns a valid response" do
+    types = Tradehub.Protocol.total_balances!()
+
+    types
+    |> Enum.each(fn x ->
+      assert String.valid?(x.available)
+      assert String.valid?(x.denom)
+      assert String.valid?(x.order)
+      assert String.valid?(x.position)
+    end)
+  end
+
+  test "expect failures" do
+    Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.status!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.block_time!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.validators!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.delegation_rewards!("tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.blocks!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.transactions!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.transaction!("")
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.transaction_types!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.total_balances!()
+    end
+
+    assert_raise HTTPoison.Error, fn ->
+      Tradehub.Protocol.external_transfers!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+    end
   end
 
   # Helper functions

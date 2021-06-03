@@ -116,12 +116,12 @@ defmodule Tradehub.Protocol do
           after_id: String.t(),
           order_by: String.t(),
           proposer: String.t(),
-          order_by: String.t()
+          limit: integer()
         }
 
-  @spec blocks(%{}) :: {:ok, list(Tradehub.block())} | {:error, HTTPoison.Error.t()}
-  @spec blocks(block_options()) :: {:ok, list(Tradehub.block())} | {:error, HTTPoison.Error.t()}
-  @spec blocks!(block_options()) :: list(Tradehub.block())
+  @spec blocks(%{}) :: {:ok, list(Tradehub.block())} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec blocks(block_options()) :: {:ok, list(Tradehub.block())} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec blocks!(block_options()) :: list(Tradehub.block()) | String.t()
 
   def blocks(block_options \\ %{}) do
     case Tradehub.get("get_blocks", params: block_options) do
@@ -168,10 +168,10 @@ defmodule Tradehub.Protocol do
         }
 
   @spec transactions(%{}) ::
-          {:ok, list(Tradehub.transaction())} | {:error, HTTPoison.Error.t()}
+          {:ok, list(Tradehub.transaction())} | String.t() | {:error, HTTPoison.Error.t()}
   @spec transactions(transaction_options) ::
-          {:ok, list(Tradehub.transaction())} | {:error, HTTPoison.Error.t()}
-  @spec transactions!(transaction_options) :: list(Tradehub.transaction())
+          {:ok, list(Tradehub.transaction())} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec transactions!(transaction_options) :: list(Tradehub.transaction()) | String.t()
 
   def transactions(transaction_options \\ %{}) do
     case Tradehub.get("get_transactions", params: transaction_options) do
@@ -192,8 +192,8 @@ defmodule Tradehub.Protocol do
 
   """
 
-  @spec transaction(String.t()) :: {:ok, Tradehub.transaction()} | {:error, HTTPoison.Error.t()}
-  @spec transaction!(String.t()) :: Tradehub.transaction()
+  @spec transaction(String.t()) :: {:ok, Tradehub.transaction_details()} | String.t() | {:error, HTTPoison.Error.t()}
+  @spec transaction!(String.t()) :: Tradehub.transaction_details() | String.t()
 
   def transaction(hash) do
     case Tradehub.get(
