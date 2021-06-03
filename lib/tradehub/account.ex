@@ -11,21 +11,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Account.account("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
-      {:ok,
-        %{
-          height: "0",
-          result: %{
-            type: "cosmos-sdk/Account",
-            value: %{
-              account_number: "0",
-              address: "",
-              coins: [],
-              public_key: nil,
-              sequence: "0"
-            }
-          }
-        }}
+      iex> Tradehub.Account.account("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
 
   """
 
@@ -48,15 +34,7 @@ defmodule Tradehub.Account do
 
   ## Examples
 
-      iex> Tradehub.Account.profile("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
-      {:ok,
-        %{
-          address: "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t",
-          last_seen_block: "0",
-          last_seen_time: "1970-01-01T00:00:00Z",
-          twitter: "",
-          username: ""
-        }}
+      iex> Tradehub.Account.profile("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
 
   """
 

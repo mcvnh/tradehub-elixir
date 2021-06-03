@@ -137,7 +137,7 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
+      iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
 
       iex> Tradehub.Wallet.address_from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
@@ -184,7 +184,7 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> Tradehub.Wallet.address_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
+      iex> Tradehub.Wallet.address_from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
 
       iex> Tradehub.Wallet.address_from_private_key!("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1", :mainnet)
@@ -210,10 +210,7 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23")
-      {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
-
-      iex> Tradehub.Wallet.address_from_public_key(<<2, 230, 25, 59, 87, 182, 114, 223, 41, 153, 127, 228, 149, 215, 139, 79, 211, 234, 174, 157, 170, 224, 165, 226, 128, 49, 41, 226, 194, 27, 80, 78, 35>>)
+      iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23", :testnet)
       {:ok, "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"}
 
       iex> Tradehub.Wallet.address_from_public_key("02e6193b57b672df29997fe495d78b4fd3eaae9daae0a5e2803129e2c21b504e23", :mainnet)
@@ -282,7 +279,7 @@ defmodule Tradehub.Wallet do
 
       iex> {:ok, wallet} = Tradehub.Wallet.from_private_key("151f85d41358f56d14bec4846c5370a3ae4f34decba71d48feac75ecbf6c8ca1")
       iex> wallet.address
-      "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
+      "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"
 
   """
 
@@ -316,13 +313,13 @@ defmodule Tradehub.Wallet do
 
   ## Examples
 
-      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito")
-      iex> wallet.address
-      "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
-
       iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :mainnet)
       iex> wallet.address
       "swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw"
+
+      iex> {:ok, wallet} = Tradehub.Wallet.from_mnemonic("wrist coyote fuel wet evil tag shoot yellow morning history visit mosquito", :testnet)
+      iex> wallet.address
+      "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t"
 
   """
 

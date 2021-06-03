@@ -27,9 +27,14 @@ defmodule Tradehub.MixProject do
 
   # Run "mix help compile.app" to learn about applications.
   def application do
+    autostart_ws = Application.fetch_env!(:tradehub, :autostart_websocket)
+
+    extra_applications = [:logger, :crypto, :httpoison, :websockex, :libsecp256k1]
+    mod = if autostart_ws, do: {Tradehub.App, []}, else: []
+
     [
-      mod: {Tradehub.App, []},
-      extra_applications: [:logger, :crypto, :httpoison, :websockex, :libsecp256k1]
+      mod: mod,
+      extra_applications: extra_applications
     ]
   end
 

@@ -1,6 +1,7 @@
 import Config
 
 config :tradehub,
+  autostart_websocket: true,
   http_client: Tradehub.Net,
   network: :mainnet,
   wallet: "second enter wire knee dial save code during ankle grape estate run"

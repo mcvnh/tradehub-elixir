@@ -29,7 +29,7 @@ defmodule TradehubTest.ProtocolTest do
   end
 
   test "GET delegation rewards should returns a valid response" do
-    rewards = Tradehub.Protocol.delegation_rewards!("tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj")
+    rewards = Tradehub.Protocol.delegation_rewards!("swth174cz08dmgluavwcz2suztvydlptp4a8fru98vw")
 
     assert String.valid?(rewards.height)
 
@@ -193,7 +193,7 @@ defmodule TradehubTest.ProtocolTest do
     end
 
     assert_raise HTTPoison.Error, fn ->
-      Tradehub.Protocol.external_transfers!("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      Tradehub.Protocol.external_transfers!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
     end
   end
 

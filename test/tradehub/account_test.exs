@@ -7,21 +7,19 @@ defmodule TradehubTest.AccountTest do
     on_exit(fn -> Application.put_all_env([{:tradehub, env}]) end)
   end
 
-  # tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj
-
   test "GET account should returns a correct response" do
-    account = Tradehub.Account.account!("tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj")
+    account = Tradehub.Account.account!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
     assert_account!(account)
   end
 
   test "GET account should returns an error object if account is invalid" do
-    account = Tradehub.Account.account!("tswththisoneneverexistsonthetradehubchain")
+    account = Tradehub.Account.account!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6x")
 
     assert String.valid?(account.error)
   end
 
   test "GET profile should retuens a correct response" do
-    profile = Tradehub.Account.profile!("tswth17y4r3p4dvzrvml3fqe5p05l7y077e4cy8s7ruj")
+    profile = Tradehub.Account.profile!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
     assert_profile!(profile)
   end
 
@@ -29,11 +27,11 @@ defmodule TradehubTest.AccountTest do
     Application.put_env(:tradehub, :http_client, TradehubTest.NetTimeoutMock)
 
     assert_raise HTTPoison.Error, fn ->
-      Tradehub.Account.account!("tswththisoneneverexistsonthetradehubchain")
+      Tradehub.Account.account!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
     end
 
     assert_raise HTTPoison.Error, fn ->
-      Tradehub.Account.profile!("tswththisoneneverexistsonthetradehubchain")
+      Tradehub.Account.profile!("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
     end
 
     assert_raise HTTPoison.Error, fn ->

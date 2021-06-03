@@ -99,7 +99,7 @@ defmodule TradehubTest.ExchangeTest do
   end
 
   test "GET oracle result should returns a valid response" do
-    oracle = Tradehub.Exchange.oracle_result!("DETH")
+    oracle = Tradehub.Exchange.oracle_result!("SIDXETH")
 
     assert String.valid?(oracle.block_height)
     assert String.valid?(oracle.data)

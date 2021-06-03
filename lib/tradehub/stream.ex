@@ -213,7 +213,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.account_trades("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.account_trades("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -228,7 +228,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.account_trades_by_market("swth_eth1", "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.account_trades_by_market("swth_eth1", "swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -243,7 +243,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.balances("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.balances("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -274,7 +274,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.leverages_by_market("swth_eth1", "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.leverages_by_market("swth_eth1", "swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -289,7 +289,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.leverages("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.leverages("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -335,7 +335,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.orders_by_market("swth_eth1", "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.orders_by_market("swth_eth1", "swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -350,7 +350,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.orders("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.orders("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 
@@ -366,7 +366,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.positions_by_market("swth_eth1", "tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.positions_by_market("swth_eth1", "swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
   """
@@ -380,7 +380,7 @@ defmodule Tradehub.Stream do
 
   ## Examples
 
-      iex> topic = Tradehub.Stream.positions("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> topic = Tradehub.Stream.positions("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
       iex> Process.info(self(), :messages)
       iex> Tradehub.Stream.unsubscribe topic
 

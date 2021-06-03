@@ -1,4 +1,4 @@
 import Config
 
 config :tradehub,
-  network: :testnet
+  network: :mainnet

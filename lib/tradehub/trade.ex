@@ -10,7 +10,7 @@ defmodule Tradehub.Trade do
 
   ## Examples
 
-      iex> Tradehub.Trade.get_orders("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> Tradehub.Trade.get_orders("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
 
   """
 
@@ -52,7 +52,7 @@ defmodule Tradehub.Trade do
 
   ## Examples
 
-      iex> Tradehub.Trade.positions("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> Tradehub.Trade.positions("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
 
   """
 
@@ -144,7 +144,7 @@ defmodule Tradehub.Trade do
 
   ## Examples
 
-      iex> Tradehub.Trade.position("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "swth_eth1")
+      iex> Tradehub.Trade.position("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q", "swth_eth1")
 
   """
 
@@ -165,7 +165,7 @@ defmodule Tradehub.Trade do
 
   ## Examples
 
-      iex> Tradehub.Trade.leverage("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t", "eth_h21")
+      iex> Tradehub.Trade.leverage("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q", "eth_h21")
 
   """
 
@@ -227,7 +227,7 @@ defmodule Tradehub.Trade do
 
   ## Examples
 
-      iex> Tradehub.Trade.trades_by_account("tswth174cz08dmgluavwcz2suztvydlptp4a8f8t5h4t")
+      iex> Tradehub.Trade.trades_by_account("swth1fdqkq5gc5x8h6a0j9hamc30stlvea6zldprt6q")
 
   """
 
