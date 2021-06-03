@@ -67,7 +67,7 @@ defmodule Tradehub.Stream do
   use WebSockex
   require Logger
 
-  @ws Application.get_env(:tradehub, :ws, "wss://ws.dem.exchange/ws")
+  @ws Tradehub.config(Application.fetch_env!(:tradehub, :network))[:ws]
 
   @typedoc "The channel ID"
   @type channel_id :: String.t()

@@ -41,8 +41,6 @@ Configure Tradehub network in your `config.exs`.
 ``` elixir
 config :tradehub,
   network: :testnet # :mainnet
-  rest: "https://tradescan.switcheo.org/", # default
-  ws: "wss://ws.dem.exchange/ws" # default
   wallet: '[YOUR_MNEMONIC]'
 ```
 

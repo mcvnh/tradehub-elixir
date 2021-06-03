@@ -438,4 +438,20 @@ defmodule Tradehub do
     http_client = Application.fetch_env!(:tradehub, :http_client)
     http_client.post("txs", body, headers, options)
   end
+
+  @doc false
+  def config(:mainnet) do
+    %{
+      rest: "https://tradescan.switcheo.org/",
+      ws: "wss://ws.dem.exchange/ws"
+    }
+  end
+
+  @doc false
+  def config(:testnet) do
+    %{
+      rest: "https://test-tradescan.switcheo.org/",
+      ws: "wss://test-ws.dem.exchange/ws"
+    }
+  end
 end

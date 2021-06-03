@@ -3,7 +3,7 @@ defmodule Tradehub.Net do
 
   use HTTPoison.Base
 
-  @rest Application.get_env(:tradehub, :rest, nil)
+  @rest Tradehub.config(Application.fetch_env!(:tradehub, :network))[:rest]
 
   def process_request_url(url) do
     case String.starts_with?(url, "http") do
