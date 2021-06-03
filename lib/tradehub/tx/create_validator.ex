@@ -38,8 +38,8 @@ defmodule Tradehub.Tx.CreateValidator do
 
   def validate!(message) do
     if blank?(message.description), do: raise(MsgInvalid, message: "Description is required")
-    if blank?(message.description.monkier), do: raise(MsgInvalid, message: "Monkier is required")
-    if blank?(message.description.identify), do: raise(MsgInvalid, message: "Identify is required")
+    if blank?(message.description.moniker), do: raise(MsgInvalid, message: "Moniker is required")
+    if blank?(message.description.identity), do: raise(MsgInvalid, message: "Identity is required")
     if blank?(message.description.website), do: raise(MsgInvalid, message: "Website is required")
     if blank?(message.description.details), do: raise(MsgInvalid, message: "Description details is required")
 
