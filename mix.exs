@@ -2,7 +2,7 @@ defmodule Tradehub.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/anhmv/tradehub-elixir"
-  @version "0.1.16"
+  @version "0.1.17"
 
   def project do
     [
